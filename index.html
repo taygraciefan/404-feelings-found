@@ -1,8 +1,81 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>404: Feelings Found</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+  body {
+    background-color: #0F0F1A;
+    color: #F1F1F1;
+    font-family: monospace;
+    text-align: center;
+    padding-top: 100px;
+  }
+
+  h1 {
+    color: #00F0FF;
+    font-size: 3rem;
+    text-shadow:
+      0 0 5px #00F0FF,
+      0 0 10px #00F0FF,
+      0 0 20px #00F0FF,
+      0 0 40px #00F0FF;
+    animation: glow 1.5s ease-in-out infinite alternate;
+  }
+
+  @keyframes glow {
+    from {
+      text-shadow:
+        0 0 5px #00F0FF,
+        0 0 10px #00F0FF,
+        0 0 20px #00F0FF,
+        0 0 40px #00F0FF;
+    }
+    to {
+      text-shadow:
+        0 0 10px #00F0FF,
+        0 0 20px #00F0FF,
+        0 0 30px #00F0FF,
+        0 0 50px #00F0FF;
+    }
+  }
+
+  p {
+    color: #9D4EDD;
+  }
+
+  .terminal {
+    background-color: #1A1A2E;
+    padding: 20px;
+    margin: 20px auto;
+    width: 70%;
+    border-radius: 10px;
+  }
+
+  /* Blinking cursor */
+  .terminal p::after {
+    content: "|";
+    animation: blink 1s step-start infinite;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+
+  .buttons a {
+    display: inline-block;
+    margin: 15px;
+    padding: 10px 20px;
+    border: 2px solid #00F0FF;
+    color: #00F0FF;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: 0.3s;
+  }
+
+  .buttons a:hover {
+    background-color: #00F0FF;
+    color: #0F0F1A;
+  }
+</style>
 </head>
 <body>
 
