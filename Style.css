@@ -22,3 +22,41 @@ p {
   width: 70%;
   border-radius: 10px;
 }
+/* Neon glow effect for title */
+h1 {
+  color: #00F0FF;
+  font-size: 3rem;
+  text-shadow:
+    0 0 5px #00F0FF,
+    0 0 10px #00F0FF,
+    0 0 20px #00F0FF,
+    0 0 40px #00F0FF;
+  animation: glow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    text-shadow:
+      0 0 5px #00F0FF,
+      0 0 10px #00F0FF,
+      0 0 20px #00F0FF,
+      0 0 40px #00F0FF;
+  }
+  to {
+    text-shadow:
+      0 0 10px #00F0FF,
+      0 0 20px #00F0FF,
+      0 0 30px #00F0FF,
+      0 0 50px #00F0FF;
+  }
+}
+
+/* Blinking cursor effect */
+.terminal p::after {
+  content: "|";
+  animation: blink 1s step-start infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
