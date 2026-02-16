@@ -1,69 +1,149 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404: Feelings Found</title>
+
   <style>
-  body {
-    background-color: #0F0F1A;
-    color: #F1F1F1;
-    font-family: monospace;
-    text-align: center;
-    padding-top: 100px;
-  }
+    /* GENERAL STYLES */
+    body {
+      background-color: #0F0F1A;
+      color: #F1F1F1;
+      font-family: monospace;
+      text-align: center;
+      padding-top: 100px;
+    }
 
-  h1 {
-    color: #00F0FF;
-    font-size: 3rem;
-    text-shadow:
-      0 0 5px #00F0FF,
-      0 0 10px #00F0FF,
-      0 0 20px #00F0FF,
-      0 0 40px #00F0FF;
-    animation: glow 1.5s ease-in-out infinite alternate;
-  }
-
-  @keyframes glow {
-    from {
+    /* GLOWING NEON TITLE */
+    h1 {
+      color: #00F0FF;
+      font-size: 3rem;
       text-shadow:
         0 0 5px #00F0FF,
         0 0 10px #00F0FF,
         0 0 20px #00F0FF,
         0 0 40px #00F0FF;
+      animation: glow 1.5s ease-in-out infinite alternate;
     }
-    to {
-      text-shadow:
-        0 0 10px #00F0FF,
-        0 0 20px #00F0FF,
-        0 0 30px #00F0FF,
-        0 0 50px #00F0FF;
+
+    @keyframes glow {
+      from {
+        text-shadow:
+          0 0 5px #00F0FF,
+          0 0 10px #00F0FF,
+          0 0 20px #00F0FF,
+          0 0 40px #00F0FF;
+      }
+      to {
+        text-shadow:
+          0 0 10px #00F0FF,
+          0 0 20px #00F0FF,
+          0 0 30px #00F0FF,
+          0 0 50px #00F0FF;
+      }
     }
-  }
 
-  p {
-    color: #9D4EDD;
-  }
+    /* SUBTITLE */
+    p {
+      color: #9D4EDD;
+    }
 
-  .terminal {
-    background-color: #1A1A2E;
-    padding: 20px;
-    margin: 20px auto;
-    width: 70%;
-    border-radius: 10px;
-  }
+    /* TERMINAL BOX */
+    .terminal {
+      background-color: #1A1A2E;
+      padding: 20px;
+      margin: 20px auto;
+      width: 70%;
+      border-radius: 10px;
+      text-align: left;
+    }
 
-  /* Blinking cursor */
-  .terminal p::after {
-    content: "|";
-    animation: blink 1s step-start infinite;
-  }
+    /* BLINKING CURSOR */
+    .terminal p::after {
+      content: "|";
+      animation: blink 1s step-start infinite;
+    }
 
-  @keyframes blink {
-    50% { opacity: 0; }
-  }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
 
-  .buttons a {
-    display: inline-block;
-    margin: 15px;
-    padding: 10px 20px;
+    /* XP BAR */
+    .xp-container {
+      width: 70%;
+      margin: 20px auto;
+      text-align: left;
+    }
+
+    .xp-bar {
+      background-color: #1A1A2E;
+      border-radius: 10px;
+      height: 25px;
+      overflow: hidden;
+      border: 2px solid #00F0FF;
+    }
+
+    .xp-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #00F0FF, #9D4EDD);
+      width: 0%;
+      border-radius: 10px 0 0 10px;
+      animation: fillXP 2s forwards;
+    }
+
+    @keyframes fillXP {
+      from { width: 0%; }
+      to { width: 40%; } /* starting XP percentage */
+    }
+
+    /* BUTTONS */
+    .buttons a {
+      display: inline-block;
+      margin: 15px;
+      padding: 10px 20px;
+      border: 2px solid #00F0FF;
+      color: #00F0FF;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: 0.3s;
+    }
+
+    .buttons a:hover {
+      background-color: #00F0FF;
+      color: #0F0F1A;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TITLE -->
+  <h1>404: Feelings Found</h1>
+  <p>Debugging my life in real time.</p>
+
+  <!-- TERMINAL -->
+  <div class="terminal">
+    <p>> status: emotionally unstable...</p>
+    <p>> loading ambition.exe ███░░░░░</p>
+  </div>
+
+  <!-- XP BAR -->
+  <div class="xp-container">
+    <p>Level Up Progress:</p>
+    <div class="xp-bar">
+      <div class="xp-fill" style="width: 40%;"></div>
+    </div>
+  </div>
+
+  <!-- BUTTONS -->
+  <div class="buttons">
+    <a href="#">Level Up</a>
+    <a href="#">Midnight Thoughts</a>
+    <a href="#">Achievements</a>
+  </div>
+
+</body>
+</html>    padding: 10px 20px;
     border: 2px solid #00F0FF;
     color: #00F0FF;
     text-decoration: none;
