@@ -18,11 +18,7 @@
   h1 {
     color: #00F0FF;
     font-size: 3rem;
-    text-shadow:
-      0 0 5px #00F0FF,
-      0 0 10px #00F0FF,
-      0 0 20px #00F0FF,
-      0 0 40px #00F0FF;
+    text-shadow: 0 0 5px #00F0FF, 0 0 10px #00F0FF, 0 0 20px #00F0FF, 0 0 40px #00F0FF;
     animation: glow 1.5s ease-in-out infinite alternate;
   }
 
@@ -40,7 +36,7 @@
     width: 70%;
     border-radius: 10px;
     text-align: left;
-    min-height: 100px;
+    min-height: 120px;
     overflow-y: auto;
   }
 
@@ -80,13 +76,23 @@
     color: #0F0F1A;
   }
 
-  /* Hidden images */
+  input.command-input {
+    width: 70%;
+    padding: 8px;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 2px solid #00F0FF;
+    background-color: #1A1A2E;
+    color: #F1F1F1;
+    font-family: monospace;
+    font-size: 1rem;
+  }
+
   .hidden-img {
     display: none;
     width: 200px;
     margin-top: 10px;
   }
-
 </style>
 </head>
 
@@ -99,6 +105,8 @@
   <p>> status: emotionally unstable...</p>
   <p>> loading ambition.exe ███░░░░░</p>
 </div>
+
+<input type="text" class="command-input" id="commandInput" placeholder="Type command and press Enter">
 
 <h2>Level: <span id="levelText">1</span></h2>
 <div class="xp-container">
@@ -123,7 +131,7 @@
 let xp = 40;
 let level = 1;
 
-// Add message to terminal
+// Terminal helper
 function addToTerminal(msg) {
   const term = document.getElementById('terminal');
   const p = document.createElement('p');
@@ -132,15 +140,13 @@ function addToTerminal(msg) {
   term.scrollTop = term.scrollHeight;
 }
 
-// XP & Level system with glowing bar
-function levelUp() {
-  xp += 10;
-  addToTerminal("+10 XP earned!");
+// XP & Level system
+function levelUp(amount = 10) {
+  xp += amount;
+  addToTerminal(`+${amount} XP earned!`);
 
   const bar = document.getElementById('xpBar');
   bar.style.width = xp + "%";
-
-  // Glow effect on Level Up
   bar.style.boxShadow = "0 0 20px #00F0FF, 0 0 40px #9D4EDD";
   setTimeout(() => bar.style.boxShadow = "none", 500);
 
@@ -152,12 +158,12 @@ function levelUp() {
     document.getElementById("levelText").innerText = level;
     alert("🎉 LEVEL UP! Welcome to Level " + level);
     addToTerminal(`🎉 Level ${level} reached! Unlocking main character energy.`);
-    document.getElementById("xpText").innerText = xp + "%";
     bar.style.width = xp + "%";
+    document.getElementById("xpText").innerText = xp + "%";
   }
 }
 
-// Random story / secret thoughts
+// Secret thoughts
 function showSecret() {
   const secrets = [
     "You feel something stirring…",
@@ -168,32 +174,48 @@ function showSecret() {
   const msg = secrets[Math.floor(Math.random() * secrets.length)];
   addToTerminal(msg);
 
-  // Reveal hidden images randomly
   const imgId = Math.random() < 0.5 ? "secretImg1" : "secretImg2";
-  const img = document.getElementById(imgId);
-  img.style.display = "block";
+  document.getElementById(imgId).style.display = "block";
 }
 
-// Random achievements
+// Achievements
 function achievement() {
   const ach = [
     "Achievement unlocked: First Debug",
     "Achievement unlocked: Midnight Hacker",
     "Achievement unlocked: Main Character Energy"
   ];
-  const msg = ach[Math.floor(Math.random() * ach.length)];
-  addToTerminal(msg);
+  addToTerminal(ach[Math.floor(Math.random() * ach.length)]);
 }
 
 // Reset terminal
 function resetTerminal() {
   document.getElementById('terminal').innerHTML =
     '<p>> status: emotionally unstable...</p><p>> loading ambition.exe ███░░░░░</p>';
-
-  // Hide images again
   document.getElementById("secretImg1").style.display = "none";
   document.getElementById("secretImg2").style.display = "none";
 }
+
+// Terminal commands
+document.getElementById('commandInput').addEventListener('keydown', function(e) {
+  if(e.key === 'Enter'){
+    const cmd = this.value.trim().toLowerCase();
+    if(cmd === "unlock color") {
+      const colors = ["#0F0F1A", "#1A0F2E", "#0F1A1A", "#2E0F1A"];
+      document.body.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+      addToTerminal(">> Background color changed.");
+    } else if(cmd === "xp boost") {
+      levelUp(20);
+    } else if(cmd === "show secret") {
+      showSecret();
+    } else if(cmd === "reset") {
+      resetTerminal();
+    } else {
+      addToTerminal(">> Unknown command: " + cmd);
+    }
+    this.value = "";
+  }
+});
 
 window.onload = function() {
   document.getElementById("xpBar").style.width = xp + "%";
