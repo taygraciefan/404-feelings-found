@@ -1,182 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>404: Feelings Found — Hacker Edition</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404: Feelings Found — Hacker RPG</title>
 
-  <style>
-    body {
-      background-color: #0F0F1A;
-      color: #F1F1F1;
-      font-family: monospace;
-      text-align: center;
-      padding-top: 50px;
-    }
+<style>
+  body {
+    background-color: #0F0F1A;
+    color: #F1F1F1;
+    font-family: monospace;
+    text-align: center;
+    padding-top: 50px;
+    transition: background-color 0.5s ease;
+  }
 
-    /* Neon glowing title */
-    h1 {
-      color: #00F0FF;
-      font-size: 3rem;
-      text-shadow:
-        0 0 5px #00F0FF,
-        0 0 10px #00F0FF,
-        0 0 20px #00F0FF,
-        0 0 40px #00F0FF;
-      animation: glow 1.5s ease-in-out infinite alternate;
-    }
+  h1 {
+    color: #00F0FF;
+    font-size: 3rem;
+    text-shadow:
+      0 0 5px #00F0FF,
+      0 0 10px #00F0FF,
+      0 0 20px #00F0FF,
+      0 0 40px #00F0FF;
+    animation: glow 1.5s ease-in-out infinite alternate;
+  }
 
-    @keyframes glow {
-      from { text-shadow: 0 0 5px #00F0FF, 0 0 10px #00F0FF, 0 0 20px #00F0FF, 0 0 40px #00F0FF; }
-      to { text-shadow: 0 0 10px #00F0FF, 0 0 20px #00F0FF, 0 0 30px #00F0FF, 0 0 50px #00F0FF; }
-    }
+  @keyframes glow {
+    from { text-shadow: 0 0 5px #00F0FF,0 0 10px #00F0FF,0 0 20px #00F0FF,0 0 40px #00F0FF; }
+    to { text-shadow: 0 0 10px #00F0FF,0 0 20px #00F0FF,0 0 30px #00F0FF,0 0 50px #00F0FF; }
+  }
 
-    p { color: #9D4EDD; }
+  p { color: #9D4EDD; }
 
-    .terminal {
-      background-color: #1A1A2E;
-      padding: 20px;
-      margin: 20px auto;
-      width: 70%;
-      border-radius: 10px;
-      text-align: left;
-      min-height: 100px;
-      overflow-y: auto;
-    }
+  .terminal {
+    background-color: #1A1A2E;
+    padding: 20px;
+    margin: 20px auto;
+    width: 70%;
+    border-radius: 10px;
+    text-align: left;
+    min-height: 100px;
+    overflow-y: auto;
+  }
 
-    .terminal p::after { content: "|"; animation: blink 1s step-start infinite; }
-    @keyframes blink { 50% { opacity: 0; } }
+  .terminal p::after { content: "|"; animation: blink 1s step-start infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
 
-    .xp-container {
-      width: 70%;
-      margin: 20px auto;
-      text-align: left;
-    }
+  .xp-container { width: 70%; margin: 20px auto; text-align: left; }
+  .xp-bar {
+    background-color: #1A1A2E;
+    border-radius: 10px;
+    height: 25px;
+    overflow: hidden;
+    border: 2px solid #00F0FF;
+  }
 
-    .xp-bar {
-      background-color: #1A1A2E;
-      border-radius: 10px;
-      height: 25px;
-      overflow: hidden;
-      border: 2px solid #00F0FF;
-    }
+  .xp-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00F0FF, #9D4EDD);
+    width: 40%;
+    border-radius: 10px 0 0 10px;
+    transition: width 0.3s ease, box-shadow 0.3s ease;
+  }
 
-    .xp-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #00F0FF, #9D4EDD);
-      width: 40%;
-      border-radius: 10px 0 0 10px;
-      transition: width 0.3s ease;
-    }
+  .buttons a {
+    display: inline-block;
+    margin: 10px;
+    padding: 10px 20px;
+    border: 2px solid #00F0FF;
+    color: #00F0FF;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: 0.3s;
+  }
 
-    .buttons a {
-      display: inline-block;
-      margin: 10px;
-      padding: 10px 20px;
-      border: 2px solid #00F0FF;
-      color: #00F0FF;
-      text-decoration: none;
-      border-radius: 5px;
-      transition: 0.3s;
-    }
+  .buttons a:hover {
+    background-color: #00F0FF;
+    color: #0F0F1A;
+  }
 
-    .buttons a:hover {
-      background-color: #00F0FF;
-      color: #0F0F1A;
-    }
+  /* Hidden images */
+  .hidden-img {
+    display: none;
+    width: 200px;
+    margin-top: 10px;
+  }
 
-  </style>
+</style>
 </head>
+
 <body>
 
-  <!-- TITLE -->
-  <h1>404: Feelings Found</h1>
-  <p>Debugging my life in real time.</p>
+<h1>404: Feelings Found</h1>
+<p>Debugging my life in real time.</p>
 
-  <!-- TERMINAL -->
-  <div class="terminal" id="terminal">
-    <p>> status: emotionally unstable...</p>
-    <p>> loading ambition.exe ███░░░░░</p>
+<div class="terminal" id="terminal">
+  <p>> status: emotionally unstable...</p>
+  <p>> loading ambition.exe ███░░░░░</p>
+</div>
+
+<h2>Level: <span id="levelText">1</span></h2>
+<div class="xp-container">
+  <p>Level Up Progress: <span id="xpText">40%</span></p>
+  <div class="xp-bar">
+    <div class="xp-fill" id="xpBar"></div>
   </div>
+</div>
 
-  <!-- LEVEL & XP -->
-  <h2>Level: <span id="levelText">1</span></h2>
-  <div class="xp-container">
-    <p>Level Up Progress: <span id="xpText">40%</span></p>
-    <div class="xp-bar">
-      <div class="xp-fill" id="xpBar"></div>
-    </div>
-  </div>
+<div class="buttons">
+  <a href="#" onclick="levelUp()">Level Up</a>
+  <a href="#" onclick="showSecret()">Midnight Thoughts</a>
+  <a href="#" onclick="achievement()">Achievements</a>
+  <a href="#" onclick="resetTerminal()">Reset Terminal</a>
+</div>
 
-  <!-- BUTTONS -->
-  <div class="buttons">
-    <a href="#" onclick="levelUp()">Level Up</a>
-    <a href="#" onclick="showSecret()">Midnight Thoughts</a>
-    <a href="#" onclick="achievement()">Achievements</a>
-    <a href="#" onclick="resetTerminal()">Reset Terminal</a>
-  </div>
+<!-- Hidden images -->
+<img src="https://i.imgur.com/1JYk8wT.png" class="hidden-img" id="secretImg1">
+<img src="https://i.imgur.com/HF4rU1r.png" class="hidden-img" id="secretImg2">
 
-  <script>
-    // ---- CORE XP & LEVEL SYSTEM ----
-    let xp = 40;
-    let level = 1;
+<script>
+let xp = 40;
+let level = 1;
 
-    function addToTerminal(msg) {
-      const term = document.getElementById('terminal');
-      const p = document.createElement('p');
-      p.textContent = msg;
-      term.appendChild(p);
-      term.scrollTop = term.scrollHeight;
-    }
+// Add message to terminal
+function addToTerminal(msg) {
+  const term = document.getElementById('terminal');
+  const p = document.createElement('p');
+  p.textContent = msg;
+  term.appendChild(p);
+  term.scrollTop = term.scrollHeight;
+}
 
-    function levelUp() {
-      xp += 10;
-      addToTerminal("+10 XP earned!");
+// XP & Level system with glowing bar
+function levelUp() {
+  xp += 10;
+  addToTerminal("+10 XP earned!");
 
-      if (xp >= 100) {
-        xp = 0;
-        level++;
-        document.getElementById("levelText").innerText = level;
-        alert("🎉 LEVEL UP! Welcome to Level " + level);
-        addToTerminal(`🎉 Level ${level} reached! Unlocking main character energy.`);
-      }
+  const bar = document.getElementById('xpBar');
+  bar.style.width = xp + "%";
 
-      document.getElementById("xpBar").style.width = xp + "%";
-      document.getElementById("xpText").innerText = xp + "%";
-    }
+  // Glow effect on Level Up
+  bar.style.boxShadow = "0 0 20px #00F0FF, 0 0 40px #9D4EDD";
+  setTimeout(() => bar.style.boxShadow = "none", 500);
 
-    // ---- INTERACTIVE STORY / SECRET BUTTONS ----
-    function showSecret() {
-      const secrets = [
-        "You feel something stirring…",
-        "Midnight thoughts unlocked!",
-        "Something hidden lies in the code…",
-        "Hack the matrix, hack yourself."
-      ];
-      const msg = secrets[Math.floor(Math.random() * secrets.length)];
-      addToTerminal(msg);
-    }
+  document.getElementById("xpText").innerText = xp + "%";
 
-    function achievement() {
-      const ach = [
-        "Achievement unlocked: First Debug",
-        "Achievement unlocked: Midnight Hacker",
-        "Achievement unlocked: Main Character Energy"
-      ];
-      const msg = ach[Math.floor(Math.random() * ach.length)];
-      addToTerminal(msg);
-    }
+  if (xp >= 100) {
+    xp = 0;
+    level++;
+    document.getElementById("levelText").innerText = level;
+    alert("🎉 LEVEL UP! Welcome to Level " + level);
+    addToTerminal(`🎉 Level ${level} reached! Unlocking main character energy.`);
+    document.getElementById("xpText").innerText = xp + "%";
+    bar.style.width = xp + "%";
+  }
+}
 
-    // ---- RESET TERMINAL ----
-    function resetTerminal() {
-      document.getElementById('terminal').innerHTML =
-        '<p>> status: emotionally unstable...</p><p>> loading ambition.exe ███░░░░░</p>';
-    }
+// Random story / secret thoughts
+function showSecret() {
+  const secrets = [
+    "You feel something stirring…",
+    "Midnight thoughts unlocked!",
+    "Something hidden lies in the code…",
+    "Hack the matrix, hack yourself."
+  ];
+  const msg = secrets[Math.floor(Math.random() * secrets.length)];
+  addToTerminal(msg);
 
-    window.onload = function() {
-      document.getElementById("xpBar").style.width = xp + "%";
-    };
-  </script>
+  // Reveal hidden images randomly
+  const imgId = Math.random() < 0.5 ? "secretImg1" : "secretImg2";
+  const img = document.getElementById(imgId);
+  img.style.display = "block";
+}
+
+// Random achievements
+function achievement() {
+  const ach = [
+    "Achievement unlocked: First Debug",
+    "Achievement unlocked: Midnight Hacker",
+    "Achievement unlocked: Main Character Energy"
+  ];
+  const msg = ach[Math.floor(Math.random() * ach.length)];
+  addToTerminal(msg);
+}
+
+// Reset terminal
+function resetTerminal() {
+  document.getElementById('terminal').innerHTML =
+    '<p>> status: emotionally unstable...</p><p>> loading ambition.exe ███░░░░░</p>';
+
+  // Hide images again
+  document.getElementById("secretImg1").style.display = "none";
+  document.getElementById("secretImg2").style.display = "none";
+}
+
+window.onload = function() {
+  document.getElementById("xpBar").style.width = xp + "%";
+};
+</script>
 
 </body>
 </html>
