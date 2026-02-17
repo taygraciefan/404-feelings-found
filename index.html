@@ -1,40 +1,106 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>404: Feelings Found</title>
 
   <style>
-    /* GENERAL STYLES */
     body {
-      background-color: #0F0F1A;
-      color: #F1F1F1;
+      background-color: black;
+      color: #00ff99;
       font-family: monospace;
       text-align: center;
-      padding-top: 100px;
+      padding: 40px;
     }
 
-    /* GLOWING NEON TITLE */
-    h1 {
-      color: #00F0FF;
-      font-size: 3rem;
-      text-shadow:
-        0 0 5px #00F0FF,
-        0 0 10px #00F0FF,
-        0 0 20px #00F0FF,
-        0 0 40px #00F0FF;
-      animation: glow 1.5s ease-in-out infinite alternate;
+    .terminal {
+      border: 1px solid #00ff99;
+      padding: 20px;
+      margin: 20px auto;
+      width: 60%;
+      text-align: left;
     }
 
-    @keyframes glow {
-      from {
-        text-shadow:
-          0 0 5px #00F0FF,
-          0 0 10px #00F0FF,
-          0 0 20px #00F0FF,
-          0 0 40px #00F0FF;
+    .xp-container {
+      margin-top: 30px;
+    }
+
+    .xp-bar {
+      width: 60%;
+      height: 20px;
+      border: 1px solid #00ff99;
+      margin: 10px auto;
+    }
+
+    .xp-fill {
+      height: 100%;
+      width: 40%;
+      background-color: #00ff99;
+      transition: width 0.3s ease;
+    }
+
+    a {
+      color: #00ff99;
+      text-decoration: none;
+      border: 1px solid #00ff99;
+      padding: 5px 10px;
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    a:hover {
+      background-color: #00ff99;
+      color: black;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>404: Feelings Found</h1>
+  <p>Debugging my life in real time.</p>
+
+  <div class="terminal">
+    <p>>> status: emotionally unstable...</p>
+    <p>>> loading ambition.exe █████░░░░░</p>
+  </div>
+
+  <h2>Level: <span id="levelText">1</span></h2>
+
+  <div class="xp-container">
+    <p>Level Up Progress: <span id="xpText">40%</span></p>
+
+    <div class="xp-bar">
+      <div class="xp-fill" id="xpBar"></div>
+    </div>
+
+    <a href="#" onclick="levelUp()">Level Up</a>
+  </div>
+
+  <script>
+    let xp = 40;
+    let level = 1;
+
+    function levelUp() {
+      xp += 10;
+
+      if (xp >= 100) {
+        xp = 0;
+        level++;
+        alert("🎉 LEVEL UP! Welcome to Level " + level);
+        document.getElementById("levelText").innerText = level;
       }
+
+      document.getElementById("xpBar").style.width = xp + "%";
+      document.getElementById("xpText").innerText = xp + "%";
+    }
+
+    window.onload = function() {
+      document.getElementById("xpBar").style.width = xp + "%";
+    };
+  </script>
+
+</body>
+</html>      }
       to {
         text-shadow:
           0 0 10px #00F0FF,
