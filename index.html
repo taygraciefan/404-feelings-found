@@ -3,96 +3,70 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>404: Feelings Found — Hacker RPG</title>
+<title>404: Feelings Found — Hacker Math RPG</title>
 
 <style>
-  body {
-    background-color: #0F0F1A;
-    color: #F1F1F1;
-    font-family: monospace;
-    text-align: center;
-    padding-top: 50px;
-    transition: background-color 0.5s ease;
-  }
+body {
+  background-color: #0F0F1A;
+  color: #F1F1F1;
+  font-family: monospace;
+  text-align: center;
+  padding-top: 50px;
+  transition: background-color 1s ease;
+  overflow-x: hidden;
+}
 
-  h1 {
-    color: #00F0FF;
-    font-size: 3rem;
-    text-shadow: 0 0 5px #00F0FF, 0 0 10px #00F0FF, 0 0 20px #00F0FF, 0 0 40px #00F0FF;
-    animation: glow 1.5s ease-in-out infinite alternate;
-  }
+h1 {
+  color: #00F0FF;
+  font-size: 3rem;
+  text-shadow: 0 0 5px #00F0FF,0 0 10px #00F0FF,0 0 20px #00F0FF,0 0 40px #00F0FF;
+  animation: glow 1.5s ease-in-out infinite alternate;
+}
 
-  @keyframes glow {
-    from { text-shadow: 0 0 5px #00F0FF,0 0 10px #00F0FF,0 0 20px #00F0FF,0 0 40px #00F0FF; }
-    to { text-shadow: 0 0 10px #00F0FF,0 0 20px #00F0FF,0 0 30px #00F0FF,0 0 50px #00F0FF; }
-  }
+@keyframes glow {
+  from { text-shadow: 0 0 5px #00F0FF,0 0 10px #00F0FF,0 0 20px #00F0FF,0 0 40px #00F0FF; }
+  to { text-shadow: 0 0 10px #00F0FF,0 0 20px #00F0FF,0 0 30px #00F0FF,0 0 50px #00F0FF; }
+}
 
-  p { color: #9D4EDD; }
+p { color: #9D4EDD; }
 
-  .terminal {
-    background-color: #1A1A2E;
-    padding: 20px;
-    margin: 20px auto;
-    width: 70%;
-    border-radius: 10px;
-    text-align: left;
-    min-height: 120px;
-    overflow-y: auto;
-  }
+.terminal {
+  background-color: #1A1A2E;
+  padding: 20px;
+  margin: 20px auto;
+  width: 80%;
+  max-width: 700px;
+  border-radius: 10px;
+  text-align: left;
+  min-height: 150px;
+  overflow-y: auto;
+  border: 2px solid #00F0FF;
+}
 
-  .terminal p::after { content: "|"; animation: blink 1s step-start infinite; }
-  @keyframes blink { 50% { opacity: 0; } }
+input.command-input {
+  width: 80%;
+  padding: 12px;
+  margin-top: 15px;
+  border-radius: 5px;
+  border: 2px solid #00F0FF;
+  background-color: #1A1A2E;
+  color: #F1F1F1;
+  font-family: monospace;
+  font-size: 1rem;
+}
 
-  .xp-container { width: 70%; margin: 20px auto; text-align: left; }
-  .xp-bar {
-    background-color: #1A1A2E;
-    border-radius: 10px;
-    height: 25px;
-    overflow: hidden;
-    border: 2px solid #00F0FF;
-  }
+.xp-container { width: 80%; margin: 20px auto; text-align: left; }
+.xp-bar { background-color: #1A1A2E; border-radius: 10px; height: 25px; overflow: hidden; border: 2px solid #00F0FF; }
+.xp-fill { height: 100%; background: linear-gradient(90deg, #00F0FF, #9D4EDD); width: 40%; border-radius: 10px 0 0 10px; transition: width 0.3s ease, box-shadow 0.3s ease; }
 
-  .xp-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #00F0FF, #9D4EDD);
-    width: 40%;
-    border-radius: 10px 0 0 10px;
-    transition: width 0.3s ease, box-shadow 0.3s ease;
-  }
+.buttons a { display: inline-block; margin: 10px; padding: 10px 20px; border: 2px solid #00F0FF; color: #00F0FF; text-decoration: none; border-radius: 5px; transition: 0.3s; }
+.buttons a:hover { animation: buttonGlow 1s infinite alternate; }
 
-  .buttons a {
-    display: inline-block;
-    margin: 10px;
-    padding: 10px 20px;
-    border: 2px solid #00F0FF;
-    color: #00F0FF;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: 0.3s;
-  }
+@keyframes buttonGlow { from { box-shadow: 0 0 5px #00F0FF; } to { box-shadow: 0 0 20px #00F0FF; } }
 
-  .buttons a:hover {
-    background-color: #00F0FF;
-    color: #0F0F1A;
-  }
+.hidden-img { display: none; width: 200px; margin-top: 10px; border: 2px solid #00F0FF; border-radius: 5px; animation: flash 1s infinite alternate; }
+@keyframes flash { from { opacity: 0.6; } to { opacity: 1; } }
 
-  input.command-input {
-    width: 70%;
-    padding: 8px;
-    margin-top: 10px;
-    border-radius: 5px;
-    border: 2px solid #00F0FF;
-    background-color: #1A1A2E;
-    color: #F1F1F1;
-    font-family: monospace;
-    font-size: 1rem;
-  }
-
-  .hidden-img {
-    display: none;
-    width: 200px;
-    margin-top: 10px;
-  }
 </style>
 </head>
 
@@ -101,124 +75,179 @@
 <h1>404: Feelings Found</h1>
 <p>Debugging my life in real time.</p>
 
-<div class="terminal" id="terminal">
-  <p>> status: emotionally unstable...</p>
-  <p>> loading ambition.exe ███░░░░░</p>
-</div>
+<div class="terminal" id="terminal"></div>
 
 <input type="text" class="command-input" id="commandInput" placeholder="Type command and press Enter">
 
 <h2>Level: <span id="levelText">1</span></h2>
 <div class="xp-container">
   <p>Level Up Progress: <span id="xpText">40%</span></p>
-  <div class="xp-bar">
-    <div class="xp-fill" id="xpBar"></div>
-  </div>
+  <div class="xp-bar"><div class="xp-fill" id="xpBar"></div></div>
 </div>
 
 <div class="buttons">
   <a href="#" onclick="levelUp()">Level Up</a>
-  <a href="#" onclick="showSecret()">Midnight Thoughts</a>
+  <a href="#" onclick="startSecret()">Midnight Thoughts</a>
   <a href="#" onclick="achievement()">Achievements</a>
   <a href="#" onclick="resetTerminal()">Reset Terminal</a>
 </div>
 
-<!-- Hidden images -->
 <img src="secret1.jpg" class="hidden-img" id="secretImg1">
 <img src="secret2.jpg" class="hidden-img" id="secretImg2">
+
 <script>
 let xp = 40;
 let level = 1;
+let terminal = document.getElementById('terminal');
+let secretActive = false;
+let currentAnswer = null;
 
-// Terminal helper
-function addToTerminal(msg) {
-  const term = document.getElementById('terminal');
-  const p = document.createElement('p');
-  p.textContent = msg;
-  term.appendChild(p);
-  term.scrollTop = term.scrollHeight;
+// Typing effect
+function typeTerminal(msg, delay=30){
+  let p = document.createElement('p');
+  terminal.appendChild(p);
+  let i = 0;
+  function typing(){
+    if(i<msg.length){
+      p.textContent += msg.charAt(i);
+      i++;
+      setTimeout(typing, delay);
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+  }
+  typing();
 }
 
-// XP & Level system
-function levelUp(amount = 10) {
-  xp += amount;
-  addToTerminal(`+${amount} XP earned!`);
+// Initial terminal
+typeTerminal("> status: emotionally unstable...");
+typeTerminal("> loading ambition.exe ███░░░░░");
 
+// Level up
+function levelUp(amount = 10){
+  xp += amount;
+  typeTerminal(`+${amount} XP earned!`);
   const bar = document.getElementById('xpBar');
   bar.style.width = xp + "%";
   bar.style.boxShadow = "0 0 20px #00F0FF, 0 0 40px #9D4EDD";
-  setTimeout(() => bar.style.boxShadow = "none", 500);
-
+  setTimeout(()=> bar.style.boxShadow = "none", 500);
   document.getElementById("xpText").innerText = xp + "%";
-
-  if (xp >= 100) {
+  if(xp >= 100){
     xp = 0;
     level++;
     document.getElementById("levelText").innerText = level;
     alert("🎉 LEVEL UP! Welcome to Level " + level);
-    addToTerminal(`🎉 Level ${level} reached! Unlocking main character energy.`);
+    typeTerminal(`🎉 Level ${level} reached! Unlocking main character energy.`);
     bar.style.width = xp + "%";
     document.getElementById("xpText").innerText = xp + "%";
   }
 }
 
-// Secret thoughts
-function showSecret() {
-  const secrets = [
-    "You feel something stirring…",
-    "Midnight thoughts unlocked!",
-    "Something hidden lies in the code…",
-    "Hack the matrix, hack yourself."
-  ];
-  const msg = secrets[Math.floor(Math.random() * secrets.length)];
-  addToTerminal(msg);
+// Generate math question based on level
+function generateMathQuestion() {
+  let a,b,op;
+  if(level<3){
+    a = Math.floor(Math.random()*10)+1;
+    b = Math.floor(Math.random()*10)+1;
+    currentAnswer = a+b;
+    return `Solve to unlock secret image: ${a} + ${b} = ?`;
+  } else if(level<5){
+    a = Math.floor(Math.random()*20)+1;
+    b = Math.floor(Math.random()*20)+1;
+    op = Math.random()<0.5?'+':'-';
+    currentAnswer = op==='+'? a+b : a-b;
+    return `Solve to unlock secret image: ${a} ${op} ${b} = ?`;
+  } else if(level<7){
+    a = Math.floor(Math.random()*12)+1;
+    b = Math.floor(Math.random()*12)+1;
+    currentAnswer = a*b;
+    return `Solve to unlock secret image: ${a} × ${b} = ?`;
+  } else {
+    a = Math.floor(Math.random()*20)+1;
+    b = Math.floor(Math.random()*20)+1;
+    const ops = ['+','-','×','÷'];
+    op = ops[Math.floor(Math.random()*4)];
+    switch(op){
+      case '+': currentAnswer=a+b; break;
+      case '-': currentAnswer=a-b; break;
+      case '×': currentAnswer=a*b; break;
+      case '÷': currentAnswer=Math.floor(a/b); break;
+    }
+    return `Solve to unlock secret image: ${a} ${op} ${b} = ?`;
+  }
+}
 
-  const imgId = Math.random() < 0.5 ? "secretImg1" : "secretImg2";
-  document.getElementById(imgId).style.display = "block";
+// Start secret (math password)
+function startSecret(){
+  secretActive = true;
+  typeTerminal(generateMathQuestion());
+}
+
+// Check math answer
+function checkSecretAnswer(ans){
+  if(Number(ans) === currentAnswer){
+    typeTerminal(">> Correct! Secret unlocked! +20 XP");
+    levelUp(20);
+    const imgId = Math.random()<0.5 ? "secretImg1":"secretImg2";
+    document.getElementById(imgId).style.display = "block";
+    secretActive = false;
+    currentAnswer = null;
+  } else {
+    typeTerminal(">> Wrong! Try again, hacker.");
+  }
 }
 
 // Achievements
-function achievement() {
+function achievement(){
   const ach = [
     "Achievement unlocked: First Debug",
     "Achievement unlocked: Midnight Hacker",
     "Achievement unlocked: Main Character Energy"
   ];
-  addToTerminal(ach[Math.floor(Math.random() * ach.length)]);
+  typeTerminal(ach[Math.floor(Math.random()*ach.length)]);
 }
 
 // Reset terminal
-function resetTerminal() {
-  document.getElementById('terminal').innerHTML =
-    '<p>> status: emotionally unstable...</p><p>> loading ambition.exe ███░░░░░</p>';
+function resetTerminal(){
+  terminal.innerHTML = "";
   document.getElementById("secretImg1").style.display = "none";
   document.getElementById("secretImg2").style.display = "none";
+  secretActive=false;
+  currentAnswer=null;
+  typeTerminal("> status: emotionally unstable...");
+  typeTerminal("> loading ambition.exe ███░░░░░");
 }
 
 // Terminal commands
-document.getElementById('commandInput').addEventListener('keydown', function(e) {
-  if(e.key === 'Enter'){
-    const cmd = this.value.trim().toLowerCase();
-    if(cmd === "unlock color") {
-      const colors = ["#0F0F1A", "#1A0F2E", "#0F1A1A", "#2E0F1A"];
-      document.body.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
-      addToTerminal(">> Background color changed.");
-    } else if(cmd === "xp boost") {
-      levelUp(20);
-    } else if(cmd === "show secret") {
-      showSecret();
-    } else if(cmd === "reset") {
-      resetTerminal();
+document.getElementById('commandInput').addEventListener('keydown', function(e){
+  if(e.key==='Enter'){
+    const cmd=this.value.trim().toLowerCase();
+    if(secretActive){
+      checkSecretAnswer(cmd);
     } else {
-      addToTerminal(">> Unknown command: " + cmd);
+      switch(cmd){
+        case "unlock color":
+          const colors=["#0F0F1A","#1A0F2E","#0F1A1A","#2E0F1A"];
+          document.body.style.backgroundColor=colors[Math.floor(Math.random()*colors.length)];
+          typeTerminal(">> Background color changed."); break;
+        case "xp boost": levelUp(20); break;
+        case "show secret": startSecret(); break;
+        case "reset": resetTerminal(); break;
+        case "hack mainframe": typeTerminal(">> Hacking mainframe… success! +50 XP"); levelUp(50); break;
+        case "super hack": typeTerminal(">> SUPER HACK! Massive XP unlocked!"); levelUp(100); startSecret(); break;
+        case "night mode": document.body.style.backgroundColor="#05050A"; typeTerminal(">> Night mode enabled."); break;
+        case "random glitch": typeTerminal(">> G#@!^%$*~*#@ glitching..."); break;
+        default: typeTerminal(">> Unknown command: " + cmd);
+      }
     }
-    this.value = "";
+    this.value="";
   }
 });
 
-window.onload = function() {
-  document.getElementById("xpBar").style.width = xp + "%";
-};
+// Scroll input into view for tablet
+document.getElementById('commandInput').addEventListener('focus',()=>{document.getElementById('commandInput').scrollIntoView({behavior:'smooth'});});
+
+// Initial XP bar
+window.onload=function(){document.getElementById("xpBar").style.width=xp+"%";}
 </script>
 
 </body>
