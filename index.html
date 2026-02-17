@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>404: Feelings Found</title>
+  <title>404: Feelings Found — Hacker Edition</title>
 
   <style>
     body {
@@ -11,9 +11,10 @@
       color: #F1F1F1;
       font-family: monospace;
       text-align: center;
-      padding-top: 100px;
+      padding-top: 50px;
     }
 
+    /* Neon glowing title */
     h1 {
       color: #00F0FF;
       font-size: 3rem;
@@ -26,20 +27,8 @@
     }
 
     @keyframes glow {
-      from {
-        text-shadow:
-          0 0 5px #00F0FF,
-          0 0 10px #00F0FF,
-          0 0 20px #00F0FF,
-          0 0 40px #00F0FF;
-      }
-      to {
-        text-shadow:
-          0 0 10px #00F0FF,
-          0 0 20px #00F0FF,
-          0 0 30px #00F0FF,
-          0 0 50px #00F0FF;
-      }
+      from { text-shadow: 0 0 5px #00F0FF, 0 0 10px #00F0FF, 0 0 20px #00F0FF, 0 0 40px #00F0FF; }
+      to { text-shadow: 0 0 10px #00F0FF, 0 0 20px #00F0FF, 0 0 30px #00F0FF, 0 0 50px #00F0FF; }
     }
 
     p { color: #9D4EDD; }
@@ -51,15 +40,11 @@
       width: 70%;
       border-radius: 10px;
       text-align: left;
-      min-height: 80px;
+      min-height: 100px;
       overflow-y: auto;
     }
 
-    .terminal p::after {
-      content: "|";
-      animation: blink 1s step-start infinite;
-    }
-
+    .terminal p::after { content: "|"; animation: blink 1s step-start infinite; }
     @keyframes blink { 50% { opacity: 0; } }
 
     .xp-container {
@@ -86,7 +71,7 @@
 
     .buttons a {
       display: inline-block;
-      margin: 15px;
+      margin: 10px;
       padding: 10px 20px;
       border: 2px solid #00F0FF;
       color: #00F0FF;
@@ -99,9 +84,9 @@
       background-color: #00F0FF;
       color: #0F0F1A;
     }
+
   </style>
 </head>
-
 <body>
 
   <!-- TITLE -->
@@ -116,7 +101,6 @@
 
   <!-- LEVEL & XP -->
   <h2>Level: <span id="levelText">1</span></h2>
-
   <div class="xp-container">
     <p>Level Up Progress: <span id="xpText">40%</span></p>
     <div class="xp-bar">
@@ -127,39 +111,66 @@
   <!-- BUTTONS -->
   <div class="buttons">
     <a href="#" onclick="levelUp()">Level Up</a>
-    <a href="#">Midnight Thoughts</a>
-    <a href="#">Achievements</a>
+    <a href="#" onclick="showSecret()">Midnight Thoughts</a>
+    <a href="#" onclick="achievement()">Achievements</a>
+    <a href="#" onclick="resetTerminal()">Reset Terminal</a>
   </div>
 
-  <!-- SCRIPT -->
   <script>
+    // ---- CORE XP & LEVEL SYSTEM ----
     let xp = 40;
     let level = 1;
 
+    function addToTerminal(msg) {
+      const term = document.getElementById('terminal');
+      const p = document.createElement('p');
+      p.textContent = msg;
+      term.appendChild(p);
+      term.scrollTop = term.scrollHeight;
+    }
+
     function levelUp() {
       xp += 10;
-
-      // Add XP message in terminal
-      const terminal = document.getElementById('terminal');
-      const msg = document.createElement('p');
-      msg.textContent = `+10 XP earned!`;
-      terminal.appendChild(msg);
-      terminal.scrollTop = terminal.scrollHeight;
+      addToTerminal("+10 XP earned!");
 
       if (xp >= 100) {
         xp = 0;
         level++;
         document.getElementById("levelText").innerText = level;
         alert("🎉 LEVEL UP! Welcome to Level " + level);
-
-        const levelMsg = document.createElement('p');
-        levelMsg.textContent = `🎉 Level ${level} reached! Unlocking main character energy.`;
-        terminal.appendChild(levelMsg);
-        terminal.scrollTop = terminal.scrollHeight;
+        addToTerminal(`🎉 Level ${level} reached! Unlocking main character energy.`);
       }
 
       document.getElementById("xpBar").style.width = xp + "%";
       document.getElementById("xpText").innerText = xp + "%";
+    }
+
+    // ---- INTERACTIVE STORY / SECRET BUTTONS ----
+    function showSecret() {
+      const secrets = [
+        "You feel something stirring…",
+        "Midnight thoughts unlocked!",
+        "Something hidden lies in the code…",
+        "Hack the matrix, hack yourself."
+      ];
+      const msg = secrets[Math.floor(Math.random() * secrets.length)];
+      addToTerminal(msg);
+    }
+
+    function achievement() {
+      const ach = [
+        "Achievement unlocked: First Debug",
+        "Achievement unlocked: Midnight Hacker",
+        "Achievement unlocked: Main Character Energy"
+      ];
+      const msg = ach[Math.floor(Math.random() * ach.length)];
+      addToTerminal(msg);
+    }
+
+    // ---- RESET TERMINAL ----
+    function resetTerminal() {
+      document.getElementById('terminal').innerHTML =
+        '<p>> status: emotionally unstable...</p><p>> loading ambition.exe ███░░░░░</p>';
     }
 
     window.onload = function() {
