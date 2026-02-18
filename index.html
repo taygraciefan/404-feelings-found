@@ -143,9 +143,16 @@ function levelUp(amount = 10){
     typeTerminal(`🎉 Level ${level} reached! Unlocking main character energy.`);
     bar.style.width = xp + "%";
     document.getElementById("xpText").innerText = xp + "%";
+    if(xp >= 100){
+    xp = 0;
+    level++;
+    document.getElementById("levelText").innerText = level;
+    alert("🎉 LEVEL UP! Welcome to Level " + level);
   }
-}
 
+  saveProgress(); // 👈 THIS LINE
+}
+  
 // Generate math question based on level
 function generateMathQuestion() {
   let a,b,op;
