@@ -96,9 +96,9 @@ input.command-input {
 <img src="secret2.jpg" class="hidden-img" id="secretImg2">
 
 <script>
-let xp = 40;
-let level = 1;
-let terminal = document.getElementById('terminal');
+  let xp = Number(localStorage.getItem("xp")) || 40;
+let level = Number(localStorage.getItem("level")) || 1;
+document.getElementById('terminal');
 let secretActive = false;
 let currentAnswer = null;
 
