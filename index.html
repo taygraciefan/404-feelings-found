@@ -99,6 +99,10 @@ input.command-input {
   let xp = Number(localStorage.getItem("xp")) || 40;
 let level = Number(localStorage.getItem("level")) || 1;
 document.getElementById('terminal');
+  function saveProgress() {
+  localStorage.setItem("xp", xp);
+  localStorage.setItem("level", level);
+}
 let secretActive = false;
 let currentAnswer = null;
 
