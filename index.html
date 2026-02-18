@@ -258,8 +258,7 @@ document.getElementById('commandInput').addEventListener('keydown', function(e){
 document.getElementById('commandInput').addEventListener('focus',()=>{document.getElementById('commandInput').scrollIntoView({behavior:'smooth'});});
 
 // Initial XP bar
-window.onload=function(){
-  document.getElementById("xpBar").style.width=xp+"%";}
+window.onload=function(){document.getElementById("xpBar").style.width=xp+"%";}
   document.getElementById("xpText").innerText = xp + "%";
   document.getElementById("levelText").innerText = level;
 };
