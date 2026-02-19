@@ -1,182 +1,198 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>404: Feelings Found — Ultimate Chaos RPG</title>
+<title>404: Feelings Found</title>
 
 <style>
-body{
-  background:#0F0F1A;
-  color:#F1F1F1;
-  font-family:monospace;
-  text-align:center;
-  padding-top:40px;
-  transition: background 1s ease;
+body {
+    background-color: black;
+    color: lime;
+    font-family: monospace;
+    text-align: center;
+    padding-top: 50px;
 }
-h1{color:#00F0FF;text-shadow:0 0 15px #00F0FF;}
-.terminal{
-  background:#1A1A2E;
-  width:85%;
-  max-width:750px;
-  margin:20px auto;
-  padding:20px;
-  border:2px solid #00F0FF;
-  border-radius:10px;
-  min-height:200px;
-  text-align:left;
-  overflow-y:auto;
+
+input {
+    background: black;
+    border: 2px solid lime;
+    color: lime;
+    padding: 10px;
+    font-family: monospace;
+    width: 250px;
 }
-input{
-  width:80%;
-  padding:10px;
-  margin-top:10px;
-  background:#1A1A2E;
-  color:white;
-  border:2px solid #00F0FF;
-  border-radius:5px;
-  font-family:monospace;
+
+button {
+    background: lime;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-weight: bold;
 }
-.barBox{width:80%;margin:15px auto;text-align:left;}
-.bar{
-  height:25px;
-  border:2px solid #00F0FF;
-  border-radius:10px;
-  background:#1A1A2E;
-  overflow:hidden;
+
+#output {
+    margin-top: 20px;
+    min-height: 40px;
 }
-.fill{
-  height:100%;
-  width:40%;
-  background:linear-gradient(90deg,#00F0FF,#9D4EDD);
-  transition:width 0.3s ease;
+
+.hidden-img {
+    display: none;
+    width: 200px;
+    margin-top: 15px;
 }
-.hpFill{background:linear-gradient(90deg,#ff004c,#ff7a00);}
-.bossFill{background:linear-gradient(90deg,#ff0000,#800000);}
-button{
-  margin:6px;
-  padding:8px 15px;
-  border:2px solid #00F0FF;
-  background:none;
-  color:#00F0FF;
-  border-radius:5px;
-  cursor:pointer;
+
+#loginScreen {
+    display: block;
 }
-button:hover{box-shadow:0 0 10px #00F0FF;}
-.hidden-img{display:none;width:200px;margin:10px auto;border:2px solid #00F0FF;border-radius:5px;}
+
+#terminal {
+    display: none;
+}
 </style>
 </head>
+
 <body>
 
-<h1>404: Feelings Found</h1>
-<div class="terminal" id="terminal"></div>
-<input id="input" placeholder="Type answer & press Enter">
-
-<h3>Level: <span id="levelText">1</span></h3>
-<div class="barBox">XP: <span id="xpText">40%</span>
-<div class="bar"><div class="fill" id="xpBar"></div></div></div>
-
-<div class="barBox">HP: <span id="hpText">100</span>
-<div class="bar"><div class="fill hpFill" id="hpBar"></div></div></div>
-
-<div class="barBox" id="bossBarBox" style="display:none;">Boss HP:
-<div class="bar"><div class="fill bossFill" id="bossBar"></div></div></div>
-
-<div class="buttons">
-  <button onclick="startSecret()">Secret Math</button>
-  <button onclick="startBoss()">Boss Fight</button>
-  <button onclick="levelUp(20)">XP Boost</button>
-  <button onclick="search()">Search</button>
-  <button onclick="resetGame()">Reset</button>
+<div id="loginScreen">
+    <h1>🔐 ACCESS REQUIRED</h1>
+    <input type="password" id="password" placeholder="Enter password">
+    <button onclick="login()">Enter</button>
+    <div id="loginMsg"></div>
 </div>
 
-<img src="secret1.jpg" class="hidden-img" id="secretImg1">
-<img src="secret2.jpg" class="hidden-img" id="secretImg2">
+<div id="terminal">
+    <h1>💻 Secret Command Terminal</h1>
+    <input type="text" id="codeInput" placeholder="Type a command..." 
+    onkeydown="if(event.key==='Enter'){runCommand();}">
+    <button onclick="runCommand()">Enter</button>
+    <div id="output"></div>
+
+    <img src="secret1.jpg" class="hidden-img" id="secretImg1">
+    <img src="secret2.jpg" class="hidden-img" id="secretImg2">
+</div>
+
+<audio id="beep" src="https://www.soundjay.com/button/beep-07.wav"></audio>
 
 <script>
-let xp=40, level=1, hp=100, combo=0;
-let bossHP=0, bossMode=false, secretMode=false;
-let currentAnswer=null;
-let achievements=[];
-let enemies=["Gremlin","Trickster","Dark Hacker","Phantom Glitch"];
-let enemyHP=0, enemyActive=false;
 
-// Terminal typing
-const terminal=document.getElementById("terminal");
-function type(msg,speed=15){
-  const p=document.createElement("p");
-  terminal.appendChild(p);
-  let i=0;
-  function t(){
-    if(i<msg.length){p.textContent+=msg[i++];setTimeout(t,speed);terminal.scrollTop=terminal.scrollHeight;}
-  }
-  t();
+let mathLevel = 1;
+
+function login() {
+    let pass = document.getElementById("password").value;
+    if (pass === "queen") {
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("terminal").style.display = "block";
+    } else {
+        document.getElementById("loginMsg").innerHTML = "Access Denied.";
+    }
 }
 
-// XP & Level
-function updateXP(){document.getElementById("xpBar").style.width=xp+"%";document.getElementById("xpText").innerText=xp+"%";}
-function levelUp(amount=10){xp+=amount;type("+"+amount+" XP");if(xp>=100){xp=0;level++;document.getElementById("levelText").innerText=level;type("🎉 LEVEL "+level+" UNLOCKED");unlock("Level "+level);} updateXP();}
-
-// HP
-function updateHP(){document.getElementById("hpBar").style.width=hp+"%";document.getElementById("hpText").innerText=hp;}
-function damage(d){hp-=d;if(hp<0)hp=0;type("⚠ Took "+d+" damage");updateHP();if(hp===0){type("💀 GAME OVER");alert("Game Over!");hp=100;updateHP();}}
-
-// Math Question
-function generate(){let a=Math.floor(Math.random()*level*5)+1,b=Math.floor(Math.random()*level*5)+1;currentAnswer=a+b;return a+" + "+b+" = ?";}
-
-// Secret Math
-function startSecret(){secretMode=true;bossMode=false;type("Solve to gain XP:");type(generate());}
-
-// Boss
-function startBoss(){bossMode=true;secretMode=false;bossHP=100;document.getElementById("bossBarBox").style.display="block";updateBoss();type("🚨 BOSS BATTLE STARTED 🚨");type(generate());}
-function updateBoss(){document.getElementById("bossBar").style.width=bossHP+"%";}
-
-// Achievements
-function unlock(name){if(!achievements.includes(name)){achievements.push(name);type("🏆 Achievement Unlocked: "+name);}}
-
-// Enemy Random Encounters
-function search(){
-  let chance=Math.random();
-  if(chance<0.6){type("You found nothing..."); return;}
-  enemyActive=true;
-  secretMode=false; bossMode=false;
-  let idx=Math.floor(Math.random()*enemies.length);
-  let enemy=enemies[idx];
-  enemyHP=50+level*5;
-  type(`👾 ${enemy} appears! HP: ${enemyHP}`);
-  type("Solve math to attack!");
-  currentAnswer=Math.floor(Math.random()*level*10)+1+Math.floor(Math.random()*level*10)+1;
-  type(`${currentAnswer} - type this number exactly to attack!`);
+function typeEffect(text) {
+    let output = document.getElementById("output");
+    output.innerHTML = "";
+    let i = 0;
+    let interval = setInterval(() => {
+        output.innerHTML += text.charAt(i);
+        i++;
+        if (i >= text.length) clearInterval(interval);
+    }, 20);
 }
 
-// Attack check
-const input=document.getElementById("input");
-input.addEventListener("keydown",function(e){
-  if(e.key==="Enter"){
-    let val=Number(this.value);
-    if(secretMode||bossMode||enemyActive) check(val);
-    this.value="";
-  }
-});
-
-// Check answer
-function check(val){
-  if(val===currentAnswer){
-    combo++;
-    let crit=Math.random()<0.2; let mult=1+combo*0.1;
-    if(secretMode){let reward=Math.floor(20*mult);type("Correct! +"+reward+" XP");levelUp(reward);secretMode=false;}
-    else if(bossMode){let dmg=crit?40:20;bossHP-=dmg;type((crit?"💥 CRITICAL! ":"")+"Boss -"+dmg+" HP");updateBoss();if(bossHP<=0){type("🔥 BOSS DEFEATED");unlock("Boss Slayer");levelUp(50);bossMode=false;document.getElementById("bossBarBox").style.display="none";}else type(generate());}
-    else if(enemyActive){let dmg=crit?30:15;enemyHP-=dmg;type((crit?"💥 CRITICAL! ":"")+"Enemy -"+dmg+" HP");if(enemyHP<=0){type("✅ Enemy defeated! +20 XP");levelUp(20);enemyActive=false;}else{currentAnswer=Math.floor(Math.random()*level*10)+1+Math.floor(Math.random()*level*10)+1;type("Next attack number: "+currentAnswer);}}
-  } else {combo=0;damage(15);}
+function hackingAnimation() {
+    let output = document.getElementById("output");
+    output.innerHTML = "Accessing system";
+    let dots = 0;
+    let anim = setInterval(() => {
+        dots++;
+        output.innerHTML += ".";
+        if (dots >= 5) {
+            clearInterval(anim);
+            typeEffect("Access Granted ✔");
+        }
+    }, 400);
 }
 
-// Reset
-function resetGame(){xp=40;level=1;hp=100;combo=0;bossMode=false;secretMode=false;enemyActive=false;terminal.innerHTML="";document.getElementById("bossBarBox").style.display="none";updateXP();updateHP();document.getElementById("levelText").innerText=level;type("> system reset...");}
+function runCommand() {
+    document.getElementById("beep").play();
+    let input = document.getElementById("codeInput").value.toLowerCase();
 
-// Initial XP/HP
-updateXP();updateHP();
-type("> system booted — ready for chaos");
+    if (input === "unlock color") {
+        let randomColor = "#" + Math.floor(Math.random()*16777215).toString(16);
+        document.body.style.backgroundColor = randomColor;
+        typeEffect("Background changed!");
+    }
+
+    else if (input === "math") {
+        if (mathLevel === 1) {
+            typeEffect("Level 1: 5 + 3 = ?");
+        }
+        else if (mathLevel === 2) {
+            typeEffect("Level 2: 12 × 4 = ?");
+        }
+        else {
+            typeEffect("Level 3: 25 - 7 × 2 = ?");
+        }
+    }
+
+    else if (input === "8" && mathLevel === 1) {
+        mathLevel++;
+        typeEffect("Correct! Level up!");
+    }
+
+    else if (input === "48" && mathLevel === 2) {
+        mathLevel++;
+        typeEffect("Correct! Final Level!");
+    }
+
+    else if (input === "11" && mathLevel === 3) {
+        typeEffect("You beat all levels! 🏆");
+    }
+
+    else if (input.startsWith("calc ")) {
+        try {
+            let expression = input.replace("calc ", "");
+            let result = eval(expression);
+            typeEffect("Answer: " + result);
+        } catch {
+            typeEffect("Invalid calculation.");
+        }
+    }
+
+    else if (input === "hello") {
+        typeEffect("Hi queen 👑 You’re unstoppable.");
+    }
+
+    else if (input === "help") {
+        typeEffect("Commands: unlock color | math | calc 5+5 | show pics | hide pics | hack | exit");
+    }
+
+    else if (input === "show pics") {
+        document.getElementById("secretImg1").style.display = "block";
+        document.getElementById("secretImg2").style.display = "block";
+        typeEffect("Photos revealed.");
+    }
+
+    else if (input === "hide pics") {
+        document.getElementById("secretImg1").style.display = "none";
+        document.getElementById("secretImg2").style.display = "none";
+        typeEffect("Photos hidden.");
+    }
+
+    else if (input === "hack") {
+        hackingAnimation();
+    }
+
+    else if (input === "exit") {
+        document.body.innerHTML = "<h1>System Closed.</h1>";
+    }
+
+    else {
+        typeEffect("Unknown command.");
+    }
+
+    document.getElementById("codeInput").value = "";
+}
 
 </script>
+
 </body>
 </html>
