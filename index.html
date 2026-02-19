@@ -12,7 +12,6 @@ body{
   text-align:center;
   padding-top:40px;
   transition: background 1s ease;
-  overflow-x:hidden;
 }
 h1{color:#00F0FF;text-shadow:0 0 15px #00F0FF;}
 .terminal{
@@ -68,68 +67,72 @@ button:hover{box-shadow:0 0 10px #00F0FF;}
 </head>
 <body>
 
-<h1>404: Feelings Found — ACCESS TERMINAL</h1>
+<h1>404: Feelings Found</h1>
 
-<!-- PASSWORD INPUT -->
-<input id="passwordInput" placeholder="Enter password & press Enter">
+<div class="terminal" id="terminal"></div>
+
+<!-- Password input -->
+<input id="passwordInput" placeholder="Enter password & press Enter" autofocus>
+<!-- Game input hidden until password correct -->
 <input id="gameInput" placeholder="Type commands & press Enter" style="display:none;">
 
-<!-- GAME CONTENT -->
+<!-- Full game content -->
 <div id="gameContent" style="display:none;">
-<h3>Level: <span id="levelText">1</span></h3>
-<div class="barBox">XP: <span id="xpText">40%</span>
-<div class="bar"><div class="fill" id="xpBar"></div></div></div>
-
-<div class="barBox">HP: <span id="hpText">100</span>
-<div class="bar"><div class="fill hpFill" id="hpBar"></div></div></div>
-
-<div class="barBox" id="bossBarBox" style="display:none;">Boss HP:
-<div class="bar"><div class="fill bossFill" id="bossBar"></div></div></div>
-
-<div class="buttons">
-  <button onclick="startSecret()">Secret Math</button>
-  <button onclick="startBoss()">Boss Fight</button>
-  <button onclick="levelUp(20)">XP Boost</button>
-  <button onclick="search()">Search</button>
-  <button onclick="resetGame()">Reset</button>
-</div>
-
-<img src="secret1.jpg" class="hidden-img" id="secretImg1">
-<img src="secret2.jpg" class="hidden-img" id="secretImg2">
+  <h3>Level: <span id="levelText">1</span></h3>
+  <div class="barBox">XP: <span id="xpText">40%</span>
+    <div class="bar"><div class="fill" id="xpBar"></div></div>
+  </div>
+  <div class="barBox">HP: <span id="hpText">100</span>
+    <div class="bar"><div class="fill hpFill" id="hpBar"></div></div>
+  </div>
+  <div class="barBox" id="bossBarBox" style="display:none;">Boss HP:
+    <div class="bar"><div class="fill bossFill" id="bossBar"></div></div>
+  </div>
+  <div class="buttons">
+    <button onclick="startSecret()">Secret Math</button>
+    <button onclick="startBoss()">Boss Fight</button>
+    <button onclick="levelUp(20)">XP Boost</button>
+    <button onclick="search()">Search</button>
+    <button onclick="resetGame()">Reset</button>
+  </div>
+  <img src="secret1.jpg" class="hidden-img" id="secretImg1">
+  <img src="secret2.jpg" class="hidden-img" id="secretImg2">
 </div>
 
 <script>
-// === PASSWORD SYSTEM ===
 const PASSWORD_TEXT = "buffpigeon";
-let a=Math.floor(Math.random()*20)+5, b=Math.floor(Math.random()*20)+5;
-let PASSWORD_MATH = a+" + "+b;
+let a=Math.floor(Math.random()*20)+5;
+let b=Math.floor(Math.random()*20)+5;
+let PASSWORD_MATH = a+b;
 
 const pwInput = document.getElementById("passwordInput");
 const gameInput = document.getElementById("gameInput");
 const gameContent = document.getElementById("gameContent");
 const terminal = document.getElementById("terminal");
 
-function type(msg, speed=15){
-  let p=document.createElement("p"); terminal.appendChild(p);
+// Terminal typing effect
+function type(msg,speed=15){
+  const p=document.createElement("p");
+  terminal.appendChild(p);
   let i=0;
-  function t(){ if(i<msg.length){p.textContent+=msg[i++]; setTimeout(t,speed); terminal.scrollTop=terminal.scrollHeight; } }
+  function t(){ if(i<msg.length){ p.textContent+=msg[i++]; setTimeout(t,speed); terminal.scrollTop=terminal.scrollHeight; } }
   t();
 }
 
-// Show password prompt
-type("> Enter password to access chaos RPG:");
-type("> Text: '"+PASSWORD_TEXT+"' OR solve: "+PASSWORD_MATH);
+// Prompt password
+type("> Enter password to access Chaos RPG:");
+type("> Text: '"+PASSWORD_TEXT+"' OR solve: "+a+" + "+b);
 
-// PASSWORD CHECK
-pwInput.addEventListener("keydown", function(e){
+pwInput.addEventListener("keydown",function(e){
   if(e.key==="Enter"){
+    e.preventDefault();
     let val=this.value.trim();
-    if(val===PASSWORD_TEXT || Number(val)===eval(PASSWORD_MATH)){
+    if(val===PASSWORD_TEXT || Number(val)===PASSWORD_MATH){
       type("✅ Access granted. Booting game...");
       pwInput.style.display="none";
       gameInput.style.display="block";
       gameContent.style.display="block";
-      this.value="";
+      gameInput.focus();
       bootGame();
     } else {
       type("❌ Access denied. Try again.");
@@ -138,55 +141,82 @@ pwInput.addEventListener("keydown", function(e){
   }
 });
 
-// === GAME VARIABLES ===
+// ==== CHAOS RPG GAME LOGIC ====
 let xp=40, level=1, hp=100, combo=0;
-let bossHP=0, bossMode=false, secretMode=false, enemyActive=false;
-let currentAnswer=null, achievements=[];
-let enemies=["Gremlin","Trickster","Dark Hacker","Phantom Glitch"], enemyHP=0;
+let bossHP=0, bossMode=false, secretMode=false;
+let currentAnswer=null;
+let achievements=[];
+let enemies=["Gremlin","Trickster","Dark Hacker","Phantom Glitch"];
+let enemyHP=0, enemyActive=false;
 
-// Boot game
-function bootGame(){updateXP(); updateHP(); type("> system booted — ready for chaos");}
+// Terminal typing for game
+function bootGame(){
+  type("> system booted — ready for chaos");
+  type("> Type 'help' for commands.");
+}
 
 // XP & Level
 function updateXP(){document.getElementById("xpBar").style.width=xp+"%";document.getElementById("xpText").innerText=xp+"%";}
-function levelUp(amount=10){xp+=amount; type("+"+amount+" XP"); if(xp>=100){xp=0; level++; document.getElementById("levelText").innerText=level; type("🎉 LEVEL "+level+" UNLOCKED"); unlock("Level "+level);} updateXP();}
+function levelUp(amount=10){xp+=amount;type("+"+amount+" XP");if(xp>=100){xp=0;level++;document.getElementById("levelText").innerText=level;type("🎉 LEVEL "+level+" UNLOCKED");unlock("Level "+level);} updateXP();}
 
 // HP
-function updateHP(){document.getElementById("hpBar").style.width=hp+"%"; document.getElementById("hpText").innerText=hp;}
-function damage(d){hp-=d;if(hp<0)hp=0; type("⚠ Took "+d+" damage"); updateHP(); if(hp===0){type("💀 GAME OVER"); alert("Game Over!"); hp=100; updateHP();}}
+function updateHP(){document.getElementById("hpBar").style.width=hp+"%";document.getElementById("hpText").innerText=hp;}
+function damage(d){hp-=d;if(hp<0)hp=0;type("⚠ Took "+d+" damage");updateHP();if(hp===0){type("💀 GAME OVER");alert("Game Over!");hp=100;updateHP();}}
 
 // Math Question
 function generate(){let a=Math.floor(Math.random()*level*5)+1,b=Math.floor(Math.random()*level*5)+1;currentAnswer=a+b;return a+" + "+b+" = ?";}
 
 // Secret Math
-function startSecret(){secretMode=true; bossMode=false; enemyActive=false; type("Solve to gain XP:"); type(generate());}
+function startSecret(){secretMode=true;bossMode=false;type("Solve to gain XP:");type(generate());}
 
 // Boss
-function startBoss(){bossMode=true; secretMode=false; enemyActive=false; bossHP=100; document.getElementById("bossBarBox").style.display="block"; updateBoss(); type("🚨 BOSS BATTLE STARTED 🚨"); type(generate());}
+function startBoss(){bossMode=true;secretMode=false;bossHP=100;document.getElementById("bossBarBox").style.display="block";updateBoss();type("🚨 BOSS BATTLE STARTED 🚨");type(generate());}
 function updateBoss(){document.getElementById("bossBar").style.width=bossHP+"%";}
 
 // Achievements
-function unlock(name){if(!achievements.includes(name)){achievements.push(name); type("🏆 Achievement Unlocked: "+name);}}
+function unlock(name){if(!achievements.includes(name)){achievements.push(name);type("🏆 Achievement Unlocked: "+name);}}
 
 // Enemy Random Encounters
 function search(){
   let chance=Math.random();
   if(chance<0.6){type("You found nothing..."); return;}
   enemyActive=true; secretMode=false; bossMode=false;
-  let idx=Math.floor(Math.random()*enemies.length); let enemy=enemies[idx]; enemyHP=50+level*5;
+  let idx=Math.floor(Math.random()*enemies.length);
+  let enemy=enemies[idx];
+  enemyHP=50+level*5;
   type(`👾 ${enemy} appears! HP: ${enemyHP}`);
   type("Solve math to attack!");
   currentAnswer=Math.floor(Math.random()*level*10)+1+Math.floor(Math.random()*level*10)+1;
   type(`${currentAnswer} - type this number exactly to attack!`);
 }
 
-// === GAME INPUT HANDLER ===
-gameInput.addEventListener("keydown", function(e){
+// Attack check
+gameInput.addEventListener("keydown",function(e){
   if(e.key==="Enter"){
-    let val=this.value.trim();
-    if(secretMode || bossMode || enemyActive){ check(Number(val)); }
-    else { terminalCommand(val.toLowerCase()); }
-    this.value="";
+    e.preventDefault();
+    let cmd=gameInput.value.trim().toLowerCase();
+    if(secretMode||bossMode||enemyActive){
+      check(Number(cmd));
+    } else {
+      // COMMANDS
+      switch(cmd){
+        case "unlock color":
+          const colors=["#0F0F1A","#1A0F2E","#0F1A1A","#2E0F1A"];
+          document.body.style.backgroundColor=colors[Math.floor(Math.random()*colors.length)];
+          type(">> Background color changed."); break;
+        case "math":
+          startSecret(); break;
+        case "hello":
+          type("👋 Hey hacker! Keep grinding!"); break;
+        case "help":
+          type("Available commands: unlock color, math, hello, help, exit"); break;
+        case "exit":
+          resetGame(); break;
+        default:
+          type(">> Unknown command: "+cmd);
+      }
+    }
+    gameInput.value="";
   }
 });
 
@@ -195,29 +225,18 @@ function check(val){
   if(val===currentAnswer){
     combo++;
     let crit=Math.random()<0.2; let mult=1+combo*0.1;
-    if(secretMode){let reward=Math.floor(20*mult); type("Correct! +"+reward+" XP"); levelUp(reward); secretMode=false;}
-    else if(bossMode){let dmg=crit?40:20; bossHP-=dmg; type((crit?"💥 CRITICAL! ":"")+"Boss -"+dmg+" HP"); updateBoss(); if(bossHP<=0){type("🔥 BOSS DEFEATED"); unlock("Boss Slayer"); levelUp(50); bossMode=false; document.getElementById("bossBarBox").style.display="none";} else type(generate());}
-    else if(enemyActive){let dmg=crit?30:15; enemyHP-=dmg; type((crit?"💥 CRITICAL! ":"")+"Enemy -"+dmg+" HP"); if(enemyHP<=0){type("✅ Enemy defeated! +20 XP"); levelUp(20); enemyActive=false;} else{ currentAnswer=Math.floor(Math.random()*level*10)+1+Math.floor(Math.random()*level*10)+1; type("Next attack number: "+currentAnswer);}}
-  } else {combo=0; damage(15);}
-}
-
-// Terminal Commands
-function terminalCommand(cmd){
-  if(cmd==="unlock color"){document.body.style.backgroundColor="#"+Math.floor(Math.random()*16777215).toString(16);type("🎨 Background changed!");}
-  else if(cmd.startsWith("math")){try{type("🧮 "+eval(cmd.replace("math ","")));}catch{type("Invalid math!");}}
-  else if(cmd==="hello"){type("Hi queen 👑 Keep slaying!");}
-  else if(cmd==="help"){type("Commands: unlock color | math 5+5 | hello | show pics | hide pics | exit");}
-  else if(cmd==="show pics"){document.getElementById("secretImg1").style.display="block";document.getElementById("secretImg2").style.display="block";type("Photos revealed!");}
-  else if(cmd==="hide pics"){document.getElementById("secretImg1").style.display="none";document.getElementById("secretImg2").style.display="none";type("Photos hidden!");}
-  else if(cmd==="exit"){type("Closing terminal...");}
-  else{type("Unknown command 👀");}
+    if(secretMode){let reward=Math.floor(20*mult);type("Correct! +"+reward+" XP");levelUp(reward);secretMode=false;}
+    else if(bossMode){let dmg=crit?40:20;bossHP-=dmg;type((crit?"💥 CRITICAL! ":"")+"Boss -"+dmg+" HP");updateBoss();if(bossHP<=0){type("🔥 BOSS DEFEATED");unlock("Boss Slayer");levelUp(50);bossMode=false;document.getElementById("bossBarBox").style.display="none";}else type(generate());}
+    else if(enemyActive){let dmg=crit?30:15;enemyHP-=dmg;type((crit?"💥 CRITICAL! ":"")+"Enemy -"+dmg+" HP");if(enemyHP<=0){type("✅ Enemy defeated! +20 XP");levelUp(20);enemyActive=false;}else{currentAnswer=Math.floor(Math.random()*level*10)+1+Math.floor(Math.random()*level*10)+1;type("Next attack number: "+currentAnswer);}}
+  } else {combo=0;damage(15);}
 }
 
 // Reset
 function resetGame(){xp=40;level=1;hp=100;combo=0;bossMode=false;secretMode=false;enemyActive=false;terminal.innerHTML="";document.getElementById("bossBarBox").style.display="none";updateXP();updateHP();document.getElementById("levelText").innerText=level;type("> system reset...");}
 
 // Initial XP/HP
-updateXP(); updateHP();
+updateXP();updateHP();
 </script>
+
 </body>
 </html>
