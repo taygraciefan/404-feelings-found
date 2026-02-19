@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>404: Feelings Found — Ultimate Chaos RPG + Password</title>
-
+<title>404: Feelings Found — Ultimate Chaos RPG</title>
 <style>
 body{
   background:#0F0F1A;
@@ -108,40 +107,43 @@ const PASSWORD_TEXT = "buffpigeon";
 let a=Math.floor(Math.random()*20)+5, b=Math.floor(Math.random()*20)+5;
 let PASSWORD_MATH = a+" + "+b;
 
-let terminal=document.getElementById("terminal");
-let input=document.getElementById("input");
-let gameContent=document.getElementById("gameContent");
+const input = document.getElementById("input");
+const gameContent = document.getElementById("gameContent");
+const terminal = document.getElementById("terminal");
 
-function type(msg,speed=15){
+function type(msg, speed=15){
   let p=document.createElement("p"); terminal.appendChild(p);
   let i=0;
-  function t(){if(i<msg.length){p.textContent+=msg[i++];setTimeout(t,speed);terminal.scrollTop=terminal.scrollHeight;}}
+  function t(){ if(i<msg.length){p.textContent+=msg[i++]; setTimeout(t,speed); terminal.scrollTop=terminal.scrollHeight; } }
   t();
 }
 
-// Show initial password prompt
+// Show password prompt
 type("> Enter password to access chaos RPG:");
 type("> Text: '"+PASSWORD_TEXT+"' OR solve: "+PASSWORD_MATH);
 
-input.addEventListener("keydown",function(e){
+input.addEventListener("keydown", function(e){
   if(e.key==="Enter"){
-    let val=this.value.trim();
+    let val = this.value.trim();
     // PASSWORD CHECK
-    if(gameContent.style.display==="none"){
+    if(gameContent.style.display==="none"){ 
       if(val===PASSWORD_TEXT || Number(val)===eval(PASSWORD_MATH)){
         type("✅ Access granted. Booting game...");
         gameContent.style.display="block";
-        terminalMode = true;  // <-- fixed line
+        terminalMode = true; 
+        this.placeholder="Type commands & press Enter";
         this.value="";
-        this.placeholder="Type answer & press Enter";
         bootGame();
-      } else {type("❌ Access denied. Try again.");}
-    } else {
-      // GAME MODE
-      if(secretMode||bossMode||enemyActive){check(Number(val));}
-      else if(terminalMode){terminalCommand(val.toLowerCase());}
-      else{type("No active challenge. Type 'help' to enter commands.");}
+      } else {
+        type("❌ Access denied. Try again.");
+        this.value="";
+      }
+      return;
     }
+    // GAME MODE
+    if(secretMode||bossMode||enemyActive){check(Number(val));}
+    else if(terminalMode){terminalCommand(val.toLowerCase());}
+    else{type("No active challenge. Type 'help' to enter commands.");}
     this.value="";
   }
 });
