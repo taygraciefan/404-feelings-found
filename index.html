@@ -176,18 +176,98 @@ function generateMathQuestion() {
     a = Math.floor(Math.random()*20)+1;
     b = Math.floor(Math.random()*20)+1;
     const ops = ['+','-','×','÷'];
-    op = ops[Math.floor(Math.random()*4)];
+<script>
+
+let xp = 40;
+let level = 1;
+
+let secretActive = false;
+let currentAnswer = null;
+
+const terminal = document.getElementById('terminal');
+
+// Typing effect
+function typeTerminal(msg, delay=30){
+  let p = document.createElement('p');
+  terminal.appendChild(p);
+  let i = 0;
+  function typing(){
+    if(i<msg.length){
+      p.textContent += msg.charAt(i);
+      i++;
+      setTimeout(typing, delay);
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+  }
+  typing();
+}
+
+// Initial terminal
+typeTerminal("> status: emotionally unstable...");
+typeTerminal("> loading ambition.exe ███░░░░░");
+
+// Level up
+function levelUp(amount = 10){
+  xp += amount;
+  typeTerminal(`+${amount} XP earned!`);
+
+  const bar = document.getElementById('xpBar');
+  bar.style.width = xp + "%";
+  bar.style.boxShadow = "0 0 20px #00F0FF, 0 0 40px #9D4EDD";
+
+  setTimeout(()=> bar.style.boxShadow = "none", 500);
+
+  document.getElementById("xpText").innerText = xp + "%";
+
+  if(xp >= 100){
+    xp = 0;
+    level++;
+    document.getElementById("levelText").innerText = level;
+    alert("🎉 LEVEL UP! Welcome to Level " + level);
+    typeTerminal(`🎉 Level ${level} reached! Unlocking main character energy.`);
+    bar.style.width = xp + "%";
+    document.getElementById("xpText").innerText = xp + "%";
+  }
+}
+
+// Generate math question
+function generateMathQuestion() {
+  let a,b,op;
+
+  if(level<3){
+    a = Math.floor(Math.random()*10)+1;
+    b = Math.floor(Math.random()*10)+1;
+    currentAnswer = a+b;
+    return `Solve to unlock secret image: ${a} + ${b} = ?`;
+  } 
+  else if(level<5){
+    a = Math.floor(Math.random()*20)+1;
+    b = Math.floor(Math.random()*20)+1;
+    op = Math.random()<0.5?'+':'-';
+    currentAnswer = op==='+'? a+b : a-b;
+    return `Solve to unlock secret image: ${a} ${op} ${b} = ?`;
+  } 
+  else if(level<7){
+    a = Math.floor(Math.random()*12)+1;
+    b = Math.floor(Math.random()*12)+1;
+    currentAnswer = a*b;
+    return `Solve to unlock secret image: ${a} × ${b} = ?`;
+  } 
+  else {
+    a = Math.floor(Math.random()*20)+1;
+    b = Math.floor(Math.random()*20)+1;
+    const ops = ['+','-','×'];
+    op = ops[Math.floor(Math.random()*ops.length)];
     switch(op){
       case '+': currentAnswer=a+b; break;
       case '-': currentAnswer=a-b; break;
       case '×': currentAnswer=a*b; break;
-      case '÷': currentAnswer=Math.floor(a/b); break;
     }
     return `Solve to unlock secret image: ${a} ${op} ${b} = ?`;
   }
 }
 
-// Start secret (math password)
+// Start secret
 function startSecret(){
   secretActive = true;
   typeTerminal(generateMathQuestion());
@@ -232,36 +312,69 @@ function resetTerminal(){
 document.getElementById('commandInput').addEventListener('keydown', function(e){
   if(e.key==='Enter'){
     const cmd=this.value.trim().toLowerCase();
+
     if(secretActive){
       checkSecretAnswer(cmd);
-    } else {
+    } 
+    else {
       switch(cmd){
         case "unlock color":
           const colors=["#0F0F1A","#1A0F2E","#0F1A1A","#2E0F1A"];
           document.body.style.backgroundColor=colors[Math.floor(Math.random()*colors.length)];
-          typeTerminal(">> Background color changed."); break;
-        case "xp boost": levelUp(20); break;
-        case "show secret": startSecret(); break;
-        case "reset": resetTerminal(); break;
-        case "hack mainframe": typeTerminal(">> Hacking mainframe… success! +50 XP"); levelUp(50); break;
-        case "super hack": typeTerminal(">> SUPER HACK! Massive XP unlocked!"); levelUp(100); startSecret(); break;
-        case "night mode": document.body.style.backgroundColor="#05050A"; typeTerminal(">> Night mode enabled."); break;
-        case "random glitch": typeTerminal(">> G#@!^%$*~*#@ glitching..."); break;
-        default: typeTerminal(">> Unknown command: " + cmd);
+          typeTerminal(">> Background color changed.");
+          break;
+
+        case "xp boost":
+          levelUp(20);
+          break;
+
+        case "show secret":
+          startSecret();
+          break;
+
+        case "reset":
+          resetTerminal();
+          break;
+
+        case "hack mainframe":
+          typeTerminal(">> Hacking mainframe… success! +50 XP");
+          levelUp(50);
+          break;
+
+        case "super hack":
+          typeTerminal(">> SUPER HACK! Massive XP unlocked!");
+          levelUp(100);
+          startSecret();
+          break;
+
+        case "night mode":
+          document.body.style.backgroundColor="#05050A";
+          typeTerminal(">> Night mode enabled.");
+          break;
+
+        case "random glitch":
+          typeTerminal(">> G#@!^%$*~*#@ glitching...");
+          break;
+
+        default:
+          typeTerminal(">> Unknown command: " + cmd);
       }
     }
+
     this.value="";
   }
 });
 
-// Scroll input into view for tablet
-document.getElementById('commandInput').addEventListener('focus',()=>{document.getElementById('commandInput').scrollIntoView({behavior:'smooth'});});
+// Scroll input into view
+document.getElementById('commandInput').addEventListener('focus',()=>{
+  document.getElementById('commandInput').scrollIntoView({behavior:'smooth'});
+});
 
-// Initial XP bar
-window.onload=function(){document.getElementById("xpBar").style.width=xp+"%";}
-  document.getElementById("xpText").innerText = xp + "%";
-  document.getElementById("levelText").innerText = level;
-};
+// Set initial XP UI
+document.getElementById("xpBar").style.width = xp + "%";
+document.getElementById("xpText").innerText = xp + "%";
+document.getElementById("levelText").innerText = level;
+
 </script>
 
 </body>
