@@ -131,6 +131,7 @@ input.addEventListener("keydown",function(e){
       if(val===PASSWORD_TEXT || Number(val)===eval(PASSWORD_MATH)){
         type("✅ Access granted. Booting game...");
         gameContent.style.display="block";
+        terminalMode = true;  // <-- fixed line
         this.value="";
         this.placeholder="Type answer & press Enter";
         bootGame();
