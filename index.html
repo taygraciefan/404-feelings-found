@@ -84,38 +84,71 @@ button:hover {box-shadow:0 0 10px #00F0FF;}
 
 <h1>404: Feelings Found</h1>
 
-<div class="terminal" id="terminal"></div>
-<input id="input" placeholder="Type commands & press Enter">
-
-<h3>Level: <span id="levelText">1</span></h3>
-
-<div class="barBox">
-XP: <span id="xpText">40%</span>
-<div class="bar"><div class="fill" id="xpBar"></div></div>
+<div id="passwordScreen">
+    <p>Enter password to access the game:</p>
+    <input id="passwordInput" placeholder="Type password here & press Enter">
+    <p>(Hint: It’s a fun secret 🕵️‍♂️)</p>
+    <p id="passwordMessage"></p>
 </div>
 
-<div class="barBox">
-HP: <span id="hpText">100</span>
-<div class="bar"><div class="fill hpFill" id="hpBar"></div></div>
-</div>
+<div id="gameScreen" style="display:none;">
 
-<div class="barBox" id="bossBarBox" style="display:none;">
-Boss HP: <span id="bossHPText"></span>
-<div class="bar"><div class="fill bossFill" id="bossBar"></div></div>
-</div>
+    <div class="terminal" id="terminal"></div>
+    <input id="input" placeholder="Type commands & press Enter">
 
-<div class="buttons">
-    <button onclick="startSecret()">Secret Math</button>
-    <button onclick="startBoss()">Boss Fight</button>
-    <button onclick="levelUp(20)">XP Boost</button>
-    <button onclick="search()">Search</button>
-    <button onclick="resetGame()">Reset</button>
-</div>
+    <h3>Level: <span id="levelText">1</span></h3>
 
-<img src="secret1.jpg" class="hidden-img" id="secretImg1">
-<img src="secret2.jpg" class="hidden-img" id="secretImg2">
+    <div class="barBox">
+    XP: <span id="xpText">40%</span>
+    <div class="bar"><div class="fill" id="xpBar"></div></div>
+    </div>
+
+    <div class="barBox">
+    HP: <span id="hpText">100</span>
+    <div class="bar"><div class="fill hpFill" id="hpBar"></div></div>
+    </div>
+
+    <div class="barBox" id="bossBarBox" style="display:none;">
+    Boss HP: <span id="bossHPText"></span>
+    <div class="bar"><div class="fill bossFill" id="bossBar"></div></div>
+    </div>
+
+    <div class="buttons">
+        <button onclick="startSecret()">Secret Math</button>
+        <button onclick="startBoss()">Boss Fight</button>
+        <button onclick="levelUp(20)">XP Boost</button>
+        <button onclick="search()">Search</button>
+        <button onclick="resetGame()">Reset</button>
+    </div>
+
+    <img src="secret1.jpg" class="hidden-img" id="secretImg1">
+    <img src="secret2.jpg" class="hidden-img" id="secretImg2">
+
+</div>
 
 <script>
+/******** PASSWORD FEATURE ********/
+const passwordInput = document.getElementById("passwordInput");
+const passwordMessage = document.getElementById("passwordMessage");
+const passwordScreen = document.getElementById("passwordScreen");
+const gameScreen = document.getElementById("gameScreen");
+const correctPassword = "buffpigeon";
+
+passwordInput.addEventListener("keydown", function(e){
+    if(e.key === "Enter"){
+        if(this.value === correctPassword){
+            passwordScreen.style.display = "none";
+            gameScreen.style.display = "block";
+            type("> Password accepted — welcome agent!");
+            this.value = "";
+        } else {
+            passwordMessage.innerText = "❌ Wrong password! Try again.";
+            this.value = "";
+        }
+    }
+});
+
+/******** GAME VARIABLES ********/
 let xp=40, level=1, hp=100, combo=0;
 let bossHP=0, bossMode=false, secretMode=false;
 let currentAnswer=null;
