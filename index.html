@@ -14,10 +14,7 @@ body {
     padding-top:40px;
     transition: background 1s ease;
 }
-h1 {
-    color:#00F0FF;
-    text-shadow:0 0 15px #00F0FF;
-}
+h1 {color:#00F0FF; text-shadow:0 0 15px #00F0FF;}
 .terminal {
     background:#1A1A2E;
     width:85%;
@@ -40,11 +37,7 @@ input {
     border-radius:5px;
     font-family:monospace;
 }
-.barBox {
-    width:80%;
-    margin:15px auto;
-    text-align:left;
-}
+.barBox {width:80%; margin:15px auto; text-align:left;}
 .bar {
     height:25px;
     border:2px solid #00F0FF;
@@ -52,12 +45,7 @@ input {
     background:#1A1A2E;
     overflow:hidden;
 }
-.fill {
-    height:100%;
-    width:40%;
-    background:linear-gradient(90deg,#00F0FF,#9D4EDD);
-    transition:width 0.3s ease;
-}
+.fill {height:100%; width:40%; background:linear-gradient(90deg,#00F0FF,#9D4EDD); transition:width 0.3s ease;}
 .hpFill {background:linear-gradient(90deg,#ff004c,#ff7a00);}
 .bossFill {background:linear-gradient(90deg,#ff0000,#800000);}
 button {
@@ -70,13 +58,7 @@ button {
     cursor:pointer;
 }
 button:hover {box-shadow:0 0 10px #00F0FF;}
-.hidden-img {
-    display:none;
-    width:200px;
-    margin:10px auto;
-    border:2px solid #00F0FF;
-    border-radius:5px;
-}
+.hidden-img {display:none; width:200px; margin:10px auto; border:2px solid #00F0FF; border-radius:5px;}
 </style>
 </head>
 
@@ -84,33 +66,33 @@ button:hover {box-shadow:0 0 10px #00F0FF;}
 
 <h1>404: Feelings Found</h1>
 
+<!-- PASSWORD SCREEN -->
 <div id="passwordScreen">
     <p>Enter password to access the game:</p>
     <input id="passwordInput" placeholder="Type password here & press Enter">
-    <p>(Hint: It’s a fun secret 🕵️‍♂️)</p>
     <p id="passwordMessage"></p>
 </div>
 
+<!-- GAME SCREEN -->
 <div id="gameScreen" style="display:none;">
-
     <div class="terminal" id="terminal"></div>
     <input id="input" placeholder="Type commands & press Enter">
 
     <h3>Level: <span id="levelText">1</span></h3>
 
     <div class="barBox">
-    XP: <span id="xpText">40%</span>
-    <div class="bar"><div class="fill" id="xpBar"></div></div>
+        XP: <span id="xpText">40%</span>
+        <div class="bar"><div class="fill" id="xpBar"></div></div>
     </div>
 
     <div class="barBox">
-    HP: <span id="hpText">100</span>
-    <div class="bar"><div class="fill hpFill" id="hpBar"></div></div>
+        HP: <span id="hpText">100</span>
+        <div class="bar"><div class="fill hpFill" id="hpBar"></div></div>
     </div>
 
     <div class="barBox" id="bossBarBox" style="display:none;">
-    Boss HP: <span id="bossHPText"></span>
-    <div class="bar"><div class="fill bossFill" id="bossBar"></div></div>
+        Boss HP: <span id="bossHPText"></span>
+        <div class="bar"><div class="fill bossFill" id="bossBar"></div></div>
     </div>
 
     <div class="buttons">
@@ -123,7 +105,6 @@ button:hover {box-shadow:0 0 10px #00F0FF;}
 
     <img src="secret1.jpg" class="hidden-img" id="secretImg1">
     <img src="secret2.jpg" class="hidden-img" id="secretImg2">
-
 </div>
 
 <script>
@@ -194,11 +175,7 @@ function damage(d){
 }
 
 // Math Question
-function generate(){
-    let a=Math.floor(Math.random()*level*5)+1,b=Math.floor(Math.random()*level*5)+1;
-    currentAnswer=a+b;
-    return a+" + "+b+" = ?";
-}
+function generate(){let a=Math.floor(Math.random()*level*5)+1,b=Math.floor(Math.random()*level*5)+1; currentAnswer=a+b; return a+" + "+b+" = ?";}
 
 // Secret Math
 function startSecret(){secretMode=true;bossMode=false;type("Solve to gain XP:");type(generate());}
@@ -214,7 +191,7 @@ function startBoss(){
     type("🚨 BOSS BATTLE STARTED 🚨");
     type(generate());
 }
-function updateBoss(){document.getElementById("bossBar").style.width=bossHP+"%";document.getElementById("bossHPText").innerText=bossHP;}
+function updateBoss(){document.getElementById("bossBar").style.width=bossHP+"%"; document.getElementById("bossHPText").innerText=bossHP;}
 
 // Achievements
 function unlock(name){
@@ -239,7 +216,7 @@ function search(){
     type(`${currentAnswer} - type this number exactly to attack!`);
 }
 
-// Attack check
+// Attack check + Secret image unlock
 const input=document.getElementById("input");
 input.addEventListener("keydown",function(e){
   if(e.key==="Enter"){
@@ -263,31 +240,41 @@ input.addEventListener("keydown",function(e){
   }
 });
 
-// Check answer
 function check(val){
     if(val===currentAnswer){
         combo++;
         let mult=1+combo*0.1;
-        if(secretMode){let reward=Math.floor(20*mult);type("Correct! +"+reward+" XP");levelUp(reward);secretMode=false;}
+        if(secretMode){
+            let reward=Math.floor(20*mult);
+            type("Correct! +"+reward+" XP");
+            levelUp(reward);
+
+            // Unlock random secret image
+            const imgId = Math.random()<0.5 ? "secretImg1":"secretImg2";
+            document.getElementById(imgId).style.display="block";
+            type("🎉 Secret image unlocked!");
+
+            secretMode=false;
+        }
         else if(bossMode){
             let dmg=20;
             bossHP-=dmg;
             type("Boss -"+dmg+" HP");
             updateBoss();
-            if(bossHP<=0){type("🔥 BOSS DEFEATED");unlock("Boss Slayer");levelUp(50);bossMode=false;document.getElementById("bossBarBox").style.display="none";}else type(generate());
+            if(bossHP<=0){type("🔥 BOSS DEFEATED"); unlock("Boss Slayer"); levelUp(50); bossMode=false; document.getElementById("bossBarBox").style.display="none";} else type(generate());
         }
         else if(enemyActive){
             let dmg=15;
             enemyHP-=dmg;
             type("Enemy -"+dmg+" HP");
-            if(enemyHP<=0){type("✅ Enemy defeated! +20 XP");levelUp(20);enemyActive=false;}else{currentAnswer=Math.floor(Math.random()*level*10)+1+Math.floor(Math.random()*level*10)+1;type("Next attack number: "+currentAnswer);}}
-    } else {combo=0;damage(15);}
+            if(enemyHP<=0){type("✅ Enemy defeated! +20 XP"); levelUp(20); enemyActive=false;} else {currentAnswer=Math.floor(Math.random()*level*10)+1+Math.floor(Math.random()*level*10)+1; type("Next attack number: "+currentAnswer);}
+        }
+    } else {combo=0; damage(15);}
 }
 
 // Reset
 function resetGame(){
-    xp=40; level=1; hp=100; combo=0;
-    bossMode=false; secretMode=false; enemyActive=false;
+    xp=40; level=1; hp=100; combo=0; bossMode=false; secretMode=false; enemyActive=false;
     terminal.innerHTML="";
     document.getElementById("bossBarBox").style.display="none";
     updateXP(); updateHP();
