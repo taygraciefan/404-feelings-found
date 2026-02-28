@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>404: Feelings Found — Hacker 4.1</title>
+<title>404: Feelings Found — Hacker 4.2</title>
 <style>
 body{
   margin:0;
@@ -99,6 +99,10 @@ button:hover{
 #diaryUI button{
   margin-top:5px;
 }
+#diaryLog{
+  margin-top:10px;
+  text-align:left;
+}
 .glitch{animation:glitch 0.3s;}
 @keyframes glitch{
   0%{transform:translateX(0);}
@@ -149,7 +153,8 @@ button:hover{
 <button onclick="saveDiary()">Save Entry</button>
 <button onclick="viewDiary()">View Entries</button>
 <button onclick="clearDiary()">Clear Diary</button>
-<div id="diaryLog" style="margin-top:10px;text-align:left;"></div>
+<button onclick="toggleDiary()">Hide Diary</button>
+<div id="diaryLog"></div>
 </div>
 
 <script>
@@ -241,12 +246,44 @@ function startTrace(){
   },1000);
 }
 
+/* DIARY / BLOG FUNCTIONS */
+function saveDiary(){
+  let text=document.getElementById("diaryText").value;
+  if(text==="") return;
+  let logs=JSON.parse(localStorage.getItem("diaryLogs")||"[]");
+  logs.push(text);
+  localStorage.setItem("diaryLogs",JSON.stringify(logs));
+  type("Diary entry saved ✅");
+  document.getElementById("diaryText").value="";
+}
+function viewDiary(){
+  let logs=JSON.parse(localStorage.getItem("diaryLogs")||"[]");
+  let logDiv=document.getElementById("diaryLog");
+  logDiv.innerHTML="";
+  if(logs.length===0) logDiv.innerHTML="<p>No diary entries yet.</p>";
+  else logs.forEach((l,i)=>{let p=document.createElement("p");p.textContent=`${i+1}: ${l}`;logDiv.appendChild(p);});
+}
+function clearDiary(){
+  localStorage.removeItem("diaryLogs");
+  document.getElementById("diaryLog").innerHTML="";
+  type("Diary cleared 🗑️");
+}
+function toggleDiary(){
+  const diary=document.getElementById("diaryUI");
+  if(diary.style.display==="none"){
+    diary.style.display="block";
+    type("Diary shown.");
+  } else {
+    diary.style.display="none";
+    type("Diary hidden.");
+  }
+}
+
 /* INPUT HANDLER */
 input.addEventListener("keydown",function(e){
   if(e.key==="Enter"){
     const val=this.value.trim().toLowerCase();
 
-    /* PASSWORD */
     if(passwordMode){
       if(val==="buffpigeon"){
         type("ACCESS GRANTED");
@@ -261,7 +298,6 @@ input.addEventListener("keydown",function(e){
       this.value=""; return;
     }
 
-    /* COMMAND SYSTEM */
     if(!secretMode && !bossMode){
       switch(val){
         case "help":
@@ -284,7 +320,8 @@ input.addEventListener("keydown",function(e){
           updateBars();
           break;
         case "trace": startTrace(); break;
-        case "diary": 
+        case "diary":
+          document.getElementById("diaryUI").style.display="block";
           type("Diary opened below. Your entries are saved!");
           break;
         default:
@@ -293,7 +330,6 @@ input.addEventListener("keydown",function(e){
       this.value=""; return;
     }
 
-    /* MATH SYSTEM */
     if(Number(val)===currentAnswer){
       type("Correct");
       levelUp(20);
@@ -322,29 +358,6 @@ function startSecret(){secretMode=true;bossMode=false;type(generate());}
 function startBoss(){bossMode=true;secretMode=false;bossHP=100;document.getElementById("bossBarBox").style.display="block";type("BOSS FIGHT STARTED");type(generate());}
 function search(){type("Scanning...");setTimeout(()=>type("Nothing found."),800);}
 updateBars();
-
-/* DIARY / BLOG FEATURE */
-function saveDiary(){
-  let text=document.getElementById("diaryText").value;
-  if(text==="") return;
-  let logs=JSON.parse(localStorage.getItem("diaryLogs")||"[]");
-  logs.push(text);
-  localStorage.setItem("diaryLogs",JSON.stringify(logs));
-  type("Diary entry saved ✅");
-  document.getElementById("diaryText").value="";
-}
-function viewDiary(){
-  let logs=JSON.parse(localStorage.getItem("diaryLogs")||"[]");
-  let logDiv=document.getElementById("diaryLog");
-  logDiv.innerHTML="";
-  if(logs.length===0) logDiv.innerHTML="<p>No diary entries yet.</p>";
-  else logs.forEach((l,i)=>{let p=document.createElement("p");p.textContent=`${i+1}: ${l}`;logDiv.appendChild(p);});
-}
-function clearDiary(){
-  localStorage.removeItem("diaryLogs");
-  document.getElementById("diaryLog").innerHTML="";
-  type("Diary cleared 🗑️");
-}
 </script>
 
 </body>
