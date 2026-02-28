@@ -3,118 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>404: Feelings Found — Hacker 4.2</title>
+<title>404: Feelings Found — Hacker 4.3</title>
 <style>
-body{
-  margin:0;
-  background:#0F0F1A;
-  color:#F1F1F1;
-  font-family:monospace;
-  text-align:center;
-  overflow-x:hidden;
-}
-canvas{
-  position:fixed;
-  top:0; left:0;
-  z-index:-1;
-}
-h1{
-  margin-top:40px;
-  color:#00F0FF;
-  text-shadow:0 0 15px #00F0FF;
-}
-.terminal{
-  background:#1A1A2E;
-  width:85%;
-  max-width:750px;
-  margin:20px auto;
-  padding:20px;
-  border:2px solid #00F0FF;
-  border-radius:10px;
-  min-height:200px;
-  text-align:left;
-  overflow-y:auto;
-}
-input{
-  width:80%;
-  padding:10px;
-  margin-top:10px;
-  background:#1A1A2E;
-  color:white;
-  border:2px solid #00F0FF;
-  border-radius:5px;
-  font-family:monospace;
-}
-.bar{
-  height:25px;
-  border:2px solid #00F0FF;
-  border-radius:10px;
-  background:#1A1A2E;
-  overflow:hidden;
-}
-.fill{
-  height:100%;
-  background:linear-gradient(90deg,#00F0FF,#9D4EDD);
-  transition:width 0.3s ease;
-}
-.hpFill{
-  background:linear-gradient(90deg,#ff004c,#ff7a00);
-}
-.bossFill{
-  background:linear-gradient(90deg,#ff0000,#800000);
-}
-button{
-  margin:6px;
-  padding:8px 15px;
-  border:2px solid #00F0FF;
-  background:none;
-  color:#00F0FF;
-  border-radius:5px;
-  cursor:pointer;
-}
-button:hover{
-  box-shadow:0 0 10px #00F0FF;
-}
-.hidden-img{
-  display:none;
-  width:200px;
-  margin:10px auto;
-  border:2px solid #00F0FF;
-  border-radius:5px;
-}
-#gameUI, #diaryUI{
-  display:none;
-  animation:fadeIn 1s ease forwards;
-}
-#diaryUI textarea{
-  width:80%;
-  height:120px;
-  background:#1A1A2E;
-  color:#F1F1F1;
-  border:2px solid #00F0FF;
-  border-radius:5px;
-  font-family:monospace;
-  padding:10px;
-}
-#diaryUI button{
-  margin-top:5px;
-}
-#diaryLog{
-  margin-top:10px;
-  text-align:left;
-}
+body{margin:0;background:#0F0F1A;color:#F1F1F1;font-family:monospace;text-align:center;overflow-x:hidden;}
+canvas{position:fixed;top:0;left:0;z-index:-1;}
+h1{margin-top:40px;color:#00F0FF;text-shadow:0 0 15px #00F0FF;}
+.terminal{background:#1A1A2E;width:85%;max-width:750px;margin:20px auto;padding:20px;border:2px solid #00F0FF;border-radius:10px;min-height:200px;text-align:left;overflow-y:auto;}
+input{width:80%;padding:10px;margin-top:10px;background:#1A1A2E;color:white;border:2px solid #00F0FF;border-radius:5px;font-family:monospace;}
+.bar{height:25px;border:2px solid #00F0FF;border-radius:10px;background:#1A1A2E;overflow:hidden;}
+.fill{height:100%;background:linear-gradient(90deg,#00F0FF,#9D4EDD);transition:width 0.3s ease;}
+.hpFill{background:linear-gradient(90deg,#ff004c,#ff7a00);}
+.bossFill{background:linear-gradient(90deg,#ff0000,#800000);}
+button{margin:6px;padding:8px 15px;border:2px solid #00F0FF;background:none;color:#00F0FF;border-radius:5px;cursor:pointer;}
+button:hover{box-shadow:0 0 10px #00F0FF;}
+.hidden-img{display:none;width:200px;margin:10px auto;border:2px solid #00F0FF;border-radius:5px;}
+#gameUI,#diaryUI{display:none;animation:fadeIn 1s ease forwards;}
+#diaryUI textarea{width:80%;height:120px;background:#1A1A2E;color:#F1F1F1;border:2px solid #00F0FF;border-radius:5px;font-family:monospace;padding:10px;}
+#diaryUI button{margin-top:5px;}
+#diaryLog{margin-top:10px;text-align:left;}
 .glitch{animation:glitch 0.3s;}
-@keyframes glitch{
-  0%{transform:translateX(0);}
-  25%{transform:translateX(-6px);}
-  50%{transform:translateX(6px);}
-  75%{transform:translateX(-6px);}
-  100%{transform:translateX(0);}
-}
+@keyframes glitch{0%{transform:translateX(0);}25%{transform:translateX(-6px);}50%{transform:translateX(6px);}75%{transform:translateX(-6px);}100%{transform:translateX(0);}}
 .bossLow{animation:bossFlash 0.5s infinite alternate;}
-@keyframes bossFlash{
-  from{background:red;} to{background:darkred;}
-}
+@keyframes bossFlash{from{background:red;} to{background:darkred;}}
 @keyframes fadeIn{from{opacity:0;} to{opacity:1;}}
 </style>
 </head>
@@ -168,19 +78,7 @@ const fontSize=14;
 const columns=canvas.width/fontSize;
 const drops=[];
 for(let x=0;x<columns;x++) drops[x]=1;
-function draw(){
-  ctx.fillStyle="rgba(15,15,26,0.1)";
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle="#00F0FF";
-  ctx.font=fontSize+"px monospace";
-  for(let i=0;i<drops.length;i++){
-    const text=letters[Math.floor(Math.random()*letters.length)];
-    ctx.fillText(text,i*fontSize,drops[i]*fontSize);
-    if(drops[i]*fontSize>canvas.height&&Math.random()>0.975) drops[i]=0;
-    drops[i]++;
-  }
-}
-setInterval(draw,33);
+function draw(){ctx.fillStyle="rgba(15,15,26,0.1)";ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle="#00F0FF";ctx.font=fontSize+"px monospace";for(let i=0;i<drops.length;i++){const text=letters[Math.floor(Math.random()*letters.length)];ctx.fillText(text,i*fontSize,drops[i]*fontSize);if(drops[i]*fontSize>canvas.height&&Math.random()>0.975)drops[i]=0;drops[i]++;}}setInterval(draw,33);
 
 /* GAME LOGIC */
 let xp=40, level=1, hp=100;
@@ -193,165 +91,78 @@ const terminal=document.getElementById("terminal");
 const input=document.getElementById("input");
 
 /* TERMINAL TYPING */
-function type(msg,speed=15){
-  const p=document.createElement("p");
-  terminal.appendChild(p);
-  let i=0;
-  function t(){if(i<msg.length){p.textContent+=msg[i++];setTimeout(t,speed);terminal.scrollTop=terminal.scrollHeight;}}
-  t();
-}
+function type(msg,speed=15){const p=document.createElement("p");terminal.appendChild(p);let i=0;function t(){if(i<msg.length){p.textContent+=msg[i++];setTimeout(t,speed);terminal.scrollTop=terminal.scrollHeight;}}t();}
 
 type("> SYSTEM BOOT — ENTER PASSWORD");
 
-function updateBars(){
-  document.getElementById("xpBar").style.width=xp+"%";
-  document.getElementById("hpBar").style.width=hp+"%";
-}
-
-function levelUp(amount){
-  xp+=amount;
-  if(xp>=100){
-    xp=0;
-    level++;
-    document.getElementById("levelText").innerText=level;
-    type("LEVEL "+level+" UNLOCKED");
-    if(level===5) type("🎉 SECRET ENDING UNLOCKED 🎉");
-    if(level===10) type("⚠ WARNING: Hidden Boss Approaching...");
-  }
-  updateBars();
-}
-
-function damage(d){
-  hp-=d;
-  if(hp<0) hp=0;
-  updateBars();
-}
-
+function updateBars(){document.getElementById("xpBar").style.width=xp+"%";document.getElementById("hpBar").style.width=hp+"%";}
+function levelUp(amount){xp+=amount;if(xp>=100){xp=0;level++;document.getElementById("levelText").innerText=level;type("LEVEL "+level+" UNLOCKED");}updateBars();}
+function damage(d){hp-=d;if(hp<0)hp=0;updateBars();}
 function generate(){let a=Math.floor(Math.random()*10)+1;let b=Math.floor(Math.random()*10)+1;currentAnswer=a+b;return a+" + "+b+" = ?";}
 
 /* TRACE SYSTEM */
-function startTrace(){
-  if(traceActive) return;
-  traceActive=true;
-  type("⚠ TRACE DETECTED ⚠");
-  let count=5;
-  let interval=setInterval(()=>{
-    type("Trace in "+count+"...");
-    count--;
-    if(count<0){
-      clearInterval(interval);
-      type("IP Logged: 192.168."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255));
-      traceActive=false;
-    }
-  },1000);
-}
+function startTrace(){if(traceActive) return;traceActive=true;type("⚠ TRACE DETECTED ⚠");let count=5;let interval=setInterval(()=>{type("Trace in "+count+"...");count--;if(count<0){clearInterval(interval);type("IP Logged: 192.168."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255));traceActive=false;}},1000);}
 
 /* DIARY / BLOG FUNCTIONS */
-function saveDiary(){
-  let text=document.getElementById("diaryText").value;
-  if(text==="") return;
-  let logs=JSON.parse(localStorage.getItem("diaryLogs")||"[]");
-  logs.push(text);
-  localStorage.setItem("diaryLogs",JSON.stringify(logs));
-  type("Diary entry saved ✅");
-  document.getElementById("diaryText").value="";
-}
-function viewDiary(){
-  let logs=JSON.parse(localStorage.getItem("diaryLogs")||"[]");
-  let logDiv=document.getElementById("diaryLog");
-  logDiv.innerHTML="";
-  if(logs.length===0) logDiv.innerHTML="<p>No diary entries yet.</p>";
-  else logs.forEach((l,i)=>{let p=document.createElement("p");p.textContent=`${i+1}: ${l}`;logDiv.appendChild(p);});
-}
-function clearDiary(){
-  localStorage.removeItem("diaryLogs");
-  document.getElementById("diaryLog").innerHTML="";
-  type("Diary cleared 🗑️");
-}
-function toggleDiary(){
-  const diary=document.getElementById("diaryUI");
-  if(diary.style.display==="none"){
-    diary.style.display="block";
-    type("Diary shown.");
-  } else {
-    diary.style.display="none";
-    type("Diary hidden.");
-  }
-}
+function saveDiary(){let text=document.getElementById("diaryText").value;if(text==="")return;let logs=JSON.parse(localStorage.getItem("diaryLogs")||"[]");logs.push(text);localStorage.setItem("diaryLogs",JSON.stringify(logs));type("Diary entry saved ✅");document.getElementById("diaryText").value="";}
+function viewDiary(){let logs=JSON.parse(localStorage.getItem("diaryLogs")||"[]");let logDiv=document.getElementById("diaryLog");logDiv.innerHTML="";if(logs.length===0)logDiv.innerHTML="<p>No diary entries yet.</p>";else logs.forEach((l,i)=>{let p=document.createElement("p");p.textContent=`${i+1}: ${l}`;logDiv.appendChild(p);});}
+function clearDiary(){localStorage.removeItem("diaryLogs");document.getElementById("diaryLog").innerHTML="";type("Diary cleared 🗑️");}
+function toggleDiary(){const diary=document.getElementById("diaryUI");if(diary.style.display==="none"){diary.style.display="block";type("Diary shown.");}else{diary.style.display="none";type("Diary hidden.");}}
 
 /* INPUT HANDLER */
 input.addEventListener("keydown",function(e){
-  if(e.key==="Enter"){
-    const val=this.value.trim().toLowerCase();
-
-    if(passwordMode){
-      if(val==="buffpigeon"){
-        type("ACCESS GRANTED");
-        passwordMode=false;
-        document.getElementById("gameUI").style.display="block";
-        document.getElementById("diaryUI").style.display="block";
-      }else{
-        type("ACCESS DENIED");
-        document.body.classList.add("glitch");
-        setTimeout(()=>document.body.classList.remove("glitch"),300);
-      }
-      this.value=""; return;
+if(e.key==="Enter"){
+  const val=this.value.trim().toLowerCase();
+  if(passwordMode){
+    if(val==="buffpigeon"){
+      type("ACCESS GRANTED");
+      passwordMode=false;
+      document.getElementById("gameUI").style.display="block";
+      document.getElementById("diaryUI").style.display="none"; // diary hidden initially
+    }else{
+      type("ACCESS DENIED");
+      document.body.classList.add("glitch");
+      setTimeout(()=>document.body.classList.remove("glitch"),300);
     }
-
-    if(!secretMode && !bossMode){
-      switch(val){
-        case "help":
-          type("Commands:");
-          type("help, math, boss, search, stats, clear, admin_override, trace, diary");
-          break;
-        case "math": startSecret(); break;
-        case "boss": startBoss(); break;
-        case "search": search(); break;
-        case "stats":
-          type("Level: "+level);
-          type("XP: "+xp+"%");
-          type("HP: "+hp);
-          break;
-        case "clear": terminal.innerHTML=""; break;
-        case "admin_override":
-          type("ADMIN MODE ACTIVATED");
-          levelUp(100);
-          hp=100;
-          updateBars();
-          break;
-        case "trace": startTrace(); break;
-        case "diary":
-          document.getElementById("diaryUI").style.display="block";
-          type("Diary opened below. Your entries are saved!");
-          break;
-        default:
-          type("Unknown command. Type 'help'");
-      }
-      this.value=""; return;
-    }
-
-    if(Number(val)===currentAnswer){
-      type("Correct");
-      levelUp(20);
-      if(secretMode){
-        document.getElementById("secretImg1").style.display="block";
-        document.getElementById("secretImg2").style.display="block";
-        secretMode=false;
-      }
-      if(bossMode){
-        bossHP-=20;
-        document.getElementById("bossBar").style.width=bossHP+"%";
-        if(bossHP<=30) document.getElementById("bossBar").classList.add("bossLow");
-        if(bossHP<=0){
-          type("BOSS DEFEATED");
-          bossMode=false;
-          document.getElementById("bossBarBox").style.display="none";
-        }else type(generate());
-      }
-    }else{damage(10);}
-    this.value="";
+    this.value=""; return;
   }
-});
+  if(!secretMode && !bossMode){
+    switch(val){
+      case "help":
+        type("Commands: help, math, boss, search, stats, clear, admin_override, trace, diary");
+        break;
+      case "math": startSecret(); break;
+      case "boss": startBoss(); break;
+      case "search": search(); break;
+      case "stats":
+        type("Level: "+level); type("XP: "+xp+"%"); type("HP: "+hp); break;
+      case "clear": terminal.innerHTML=""; break;
+      case "admin_override": type("ADMIN MODE ACTIVATED"); levelUp(100); hp=100;updateBars(); break;
+      case "trace": startTrace(); break;
+      case "diary":
+        document.getElementById("diaryUI").style.display="block";
+        type("Diary opened below. Your entries are saved!"); break;
+      default: type("Unknown command. Type 'help'"); 
+    }
+    this.value=""; return;
+  }
+  if(Number(val)===currentAnswer){
+    type("Correct");
+    levelUp(20);
+    if(secretMode){
+      document.getElementById("secretImg1").style.display="block";
+      document.getElementById("secretImg2").style.display="block";
+      secretMode=false;
+    }
+    if(bossMode){
+      bossHP-=20;
+      document.getElementById("bossBar").style.width=bossHP+"%";
+      if(bossHP<=30) document.getElementById("bossBar").classList.add("bossLow");
+      if(bossHP<=0){type("BOSS DEFEATED");bossMode=false;document.getElementById("bossBarBox").style.display="none";}else type(generate());
+    }
+  }else{damage(10);}
+  this.value="";
+}});
 
 /* SECRET / BOSS */
 function startSecret(){secretMode=true;bossMode=false;type(generate());}
