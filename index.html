@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>404: Feelings Found — Hacker Mode 3.0</title>
+<title>404: Feelings Found — Hacker 4.0</title>
 
 <style>
 body{
@@ -15,7 +15,6 @@ body{
   overflow-x:hidden;
 }
 
-/* MATRIX BACKGROUND */
 canvas{
   position:fixed;
   top:0;
@@ -95,12 +94,6 @@ button:hover{
   margin:10px auto;
   border:2px solid #00F0FF;
   border-radius:5px;
-  animation:glow 1s infinite alternate;
-}
-
-@keyframes glow{
-  from{opacity:0.6;}
-  to{opacity:1;}
 }
 
 .glitch{
@@ -143,7 +136,7 @@ button:hover{
 <h1>404: Feelings Found</h1>
 
 <div class="terminal" id="terminal"></div>
-<input id="input" placeholder="Type answer & press Enter">
+<input id="input" placeholder="Type command & press Enter">
 
 <div id="gameUI">
 
@@ -172,6 +165,7 @@ button:hover{
 </div>
 
 <script>
+
 /* MATRIX EFFECT */
 const canvas=document.getElementById("matrix");
 const ctx=canvas.getContext("2d");
@@ -182,7 +176,6 @@ const fontSize=14;
 const columns=canvas.width/fontSize;
 const drops=[];
 for(let x=0;x<columns;x++) drops[x]=1;
-
 function draw(){
   ctx.fillStyle="rgba(15,15,26,0.1)";
   ctx.fillRect(0,0,canvas.width,canvas.height);
@@ -202,6 +195,7 @@ let xp=40, level=1, hp=100;
 let bossHP=0, bossMode=false, secretMode=false;
 let currentAnswer=null;
 let passwordMode=true;
+let traceActive=false;
 
 const terminal=document.getElementById("terminal");
 const input=document.getElementById("input");
@@ -222,13 +216,6 @@ function type(msg,speed=15){
 
 type("> SYSTEM BOOT — ENTER PASSWORD");
 
-function generate(){
-  let a=Math.floor(Math.random()*10)+1;
-  let b=Math.floor(Math.random()*10)+1;
-  currentAnswer=a+b;
-  return a+" + "+b+" = ?";
-}
-
 function updateBars(){
   document.getElementById("xpBar").style.width=xp+"%";
   document.getElementById("hpBar").style.width=hp+"%";
@@ -245,6 +232,10 @@ function levelUp(amount){
     if(level===5){
       type("🎉 SECRET ENDING UNLOCKED 🎉");
     }
+
+    if(level===10){
+      type("⚠ WARNING: Hidden Boss Approaching...");
+    }
   }
   updateBars();
 }
@@ -255,12 +246,37 @@ function damage(d){
   updateBars();
 }
 
+function generate(){
+  let a=Math.floor(Math.random()*10)+1;
+  let b=Math.floor(Math.random()*10)+1;
+  currentAnswer=a+b;
+  return a+" + "+b+" = ?";
+}
+
+/* TRACE SYSTEM */
+function startTrace(){
+  if(traceActive) return;
+  traceActive=true;
+  type("⚠ TRACE DETECTED ⚠");
+  let count=5;
+  let interval=setInterval(()=>{
+    type("Trace in "+count+"...");
+    count--;
+    if(count<0){
+      clearInterval(interval);
+      type("IP Logged: 192.168."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255));
+      traceActive=false;
+    }
+  },1000);
+}
+
 input.addEventListener("keydown",function(e){
 if(e.key==="Enter"){
-const val=this.value.trim();
+const val=this.value.trim().toLowerCase();
 
+/* PASSWORD */
 if(passwordMode){
-  if(val.toLowerCase()==="buffpigeon"){
+  if(val==="buffpigeon"){
     type("ACCESS GRANTED");
     passwordMode=false;
     document.getElementById("gameUI").style.display="block";
@@ -272,46 +288,87 @@ if(passwordMode){
   this.value=""; return;
 }
 
-if(val.toLowerCase()==="admin_override"){
-  type("ADMIN MODE ACTIVATED");
-  levelUp(100);
-  hp=100;
-  updateBars();
-  this.value=""; return;
+/* COMMAND SYSTEM */
+if(!secretMode && !bossMode){
+
+switch(val){
+
+case "help":
+type("Commands:");
+type("help, math, boss, search");
+type("stats, clear, admin_override");
+type("trace");
+break;
+
+case "math":
+startSecret();
+break;
+
+case "boss":
+startBoss();
+break;
+
+case "search":
+search();
+break;
+
+case "stats":
+type("Level: "+level);
+type("XP: "+xp+"%");
+type("HP: "+hp);
+break;
+
+case "clear":
+terminal.innerHTML="";
+break;
+
+case "admin_override":
+type("ADMIN MODE ACTIVATED");
+levelUp(100);
+hp=100;
+updateBars();
+break;
+
+case "trace":
+startTrace();
+break;
+
+default:
+type("Unknown command. Type 'help'");
 }
 
-if(secretMode||bossMode){
-  if(Number(val)===currentAnswer){
-    type("Correct");
-    levelUp(20);
+this.value=""; return;
+}
 
-    if(secretMode){
-      document.getElementById("secretImg1").style.display="block";
-      document.getElementById("secretImg2").style.display="block";
-      secretMode=false;
-    }
+/* MATH SYSTEM */
+if(Number(val)===currentAnswer){
+type("Correct");
+levelUp(20);
 
-    if(bossMode){
-      bossHP-=20;
-      document.getElementById("bossBar").style.width=bossHP+"%";
+if(secretMode){
+document.getElementById("secretImg1").style.display="block";
+document.getElementById("secretImg2").style.display="block";
+secretMode=false;
+}
 
-      if(bossHP<=30){
-        document.getElementById("bossBar").classList.add("bossLow");
-      }
+if(bossMode){
+bossHP-=20;
+document.getElementById("bossBar").style.width=bossHP+"%";
+if(bossHP<=30){
+document.getElementById("bossBar").classList.add("bossLow");
+}
+if(bossHP<=0){
+type("BOSS DEFEATED");
+bossMode=false;
+document.getElementById("bossBarBox").style.display="none";
+}else{
+type(generate());
+}
+}
 
-      if(bossHP<=0){
-        type("BOSS DEFEATED");
-        bossMode=false;
-        document.getElementById("bossBarBox").style.display="none";
-      }else{
-        type(generate());
-      }
-    }
-
-  }else{
-    type("Wrong");
-    damage(10);
-  }
+}else{
+type("Wrong");
+damage(10);
 }
 
 this.value="";
@@ -319,26 +376,27 @@ this.value="";
 });
 
 function startSecret(){
-  secretMode=true;
-  bossMode=false;
-  type(generate());
+secretMode=true;
+bossMode=false;
+type(generate());
 }
 
 function startBoss(){
-  bossMode=true;
-  secretMode=false;
-  bossHP=100;
-  document.getElementById("bossBarBox").style.display="block";
-  type("BOSS FIGHT STARTED");
-  type(generate());
+bossMode=true;
+secretMode=false;
+bossHP=100;
+document.getElementById("bossBarBox").style.display="block";
+type("BOSS FIGHT STARTED");
+type(generate());
 }
 
 function search(){
-  type("Scanning...");
-  setTimeout(()=>type("No threats detected."),800);
+type("Scanning...");
+setTimeout(()=>type("Nothing found."),800);
 }
 
 updateBars();
+
 </script>
 
 </body>
